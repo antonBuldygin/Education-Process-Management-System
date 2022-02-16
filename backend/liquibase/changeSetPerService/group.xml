@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <!-- Версионирование базы данных для GroupsService -->
+
+    <changeSet id="jobsService_001_create_table" author="buldygin">
+        <createTable tableName="group_g">
+            <column name="id" type="number" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="status" type="number"/>
+            <column name="created_time" type="datetime"/>
+            <column name="planned_visit_time" type="datetime"/>
+            <column name="last_action_time" type="datetime"/>
+            <column name="closed_time" type="datetime"/>
+            <column name="comment" type="LONGVARCHAR"/>
+        </createTable>
+
+        <createIndex tableName="group_g" indexName="id_clientId">
+            <column name="id"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable tableName="group_g"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="jobsService_002_create_table_sequence" author="sharypov">
+        <createSequence sequenceName="request_id_sequence"
+                        startValue="1"
+        />
+    </changeSet>
+
+</databaseChangeLog>

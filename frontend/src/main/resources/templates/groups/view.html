@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Просмотр заявки</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+
+<body>
+<h1 th:text="${'Группа №'+record.getId()} "></h1>
+<div>
+    <a href="/groups/">
+        <button>Вернуться к списку групп</button>
+    </a>
+</div>
+
+
+</body>
+
+
+ <div class="requestView">
+     <h1 th:text="${'Группа №'+record.getId()} "></h1>
+    <div>
+       Статус: <span th:text="${record.getStatus().getMessage()}"/>
+    </div>
+    <div>
+        дата создания: <span th:text="${#dates.format(record.getCreatedAt(), 'dd-MM-yyyy HH:mm')}"/>
+    </div>
+    <div>
+        Преподаватель: <span class="selectedService" th:each="service: ${record.getTeachers()}" th:text="${service.getTeacherName()}"/>
+    </div>
+    <div>
+        О группе: <p th:text="${record.getComment()}"/>
+    </div>
+
+
+
+
+    <div class="actionHistory" th:if="${record.getActionHistory() != null}">
+        <div>История группы:</div>
+        <div class="history-record" th:each="history: ${record.getActionHistory()}">
+            <div class="record-time">
+               Дата проведения изменений: <span th:text="${#dates.format(history.getTime(), 'dd-MM-yyyy HH:mm:ss')}"/>
+            </div>
+            <div class="record-type">
+                Тип: <span th:text="${history.getTypeMessage()}"/>
+            </div>
+            <div class="record-message" th:if="${history.getMessage()!= null && !history.getMessage().isEmpty()}">
+                Сообщение: <span th:text="${history.getMessage()}"/>
+            </div>
+        </div>
+    </div>
+ </div>
+<hr>
+<div>
+    <a th:href="@{/groups/delete/{id}(id=${record.getId()})}"><button>Удалить группу</button></a>
+</div>
+
+</head>
+</html>

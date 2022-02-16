@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Удаление группы</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Удаление группы</h1>
+<div>
+    <a href="/groups/"><button>К списку групп</button></a>
+</div>
+<!--<form method="delete">-->
+<!--    <p th:if="${errorsList!= null}">-->
+<!--        <p class="errorMessage" th:each="error: ${errorsList}" th:text="${error.getField()+' '+error.getDefaultMessage()}"></p>-->
+<!--    </p>-->
+
+<!--    <p>-->
+<!--        <label>Выберите дату удаления</label>-->
+<!--        <br/>-->
+<!--        <input name="visitTime" type="datetime-local"/>-->
+<!--    </p>-->
+<!--    <label>Номер группы</label>-->
+<!--    <br>-->
+<!--    <textarea name="clientId"></textarea>-->
+<!--    <p>-->
+<!--        <button>Создать заявку</button>-->
+<!--    </p>-->
+<!--</form>-->
+
+<style>
+.errorMessage {
+    color: red;
+}
+</style>
+</body>
+</html>

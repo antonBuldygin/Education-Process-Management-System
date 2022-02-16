@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Создание группы</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Создание группы</h1>
+<div>
+    <a href="/groups/"><button>К списку групп</button></a>
+</div>
+<form method="post">
+    <p th:if="${errorsList!= null}">
+        <p class="errorMessage" th:each="error: ${errorsList}" th:text="${error.getField()+' '+error.getDefaultMessage()}"></p>
+    </p>
+    <p>
+        <label>Выберите Преподавателя Группы</label>
+        <br/>
+        <select name="teachers" multiple>
+            <option th:each="job : ${teachers}" th:value="${job.id}" th:text="${job.teacherName}"></option>
+        </select>
+    </p>
+    <p>
+        <label>Выберите дату создания</label>
+        <br/>
+        <input name="dateCreatedForm" type="datetime-local"/>
+    </p>
+    <label>Комментарий о группе</label>
+    <br>
+    <textarea name="comment"></textarea>
+    <p>
+        <button>Создать заявку</button>
+    </p>
+</form>
+
+<style>
+.errorMessage {
+    color: red;
+}
+</style>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Группы</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Созданные группы </h1>
+<div>
+    <a href="/groups/create"><button>Создать группу</button></a>
+</div>
+
+<br>
+<div>
+    <a href="/"><button>В начало</button></a>
+</div>
+<div th:if="${requests.size() > 0}">
+    <div class="request" th:each="record : ${requests}">
+        <h2 th:text="${'Группа №'+record.getId() +'  Создана-'+#dates.format(record.getCreatedAt(), 'dd-MM-yyyy')}"></h2>
+        <div>
+            <span th:text="${record.getStatus().getMessage()}"/>
+        </div>
+
+        <a th:href="@{/groups/view/{id}(id=${record.getId()})}">Просмотр</a>
+    </div>
+
+</div>
+<div th:unless="${requests.size() > 0}">
+    Созданных Групп нет
+</div>
+</body>
+</html>

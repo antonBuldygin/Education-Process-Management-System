@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro https://www.liquibase.org/xml/ns/pro/liquibase-pro-4.3.xsd">
+
+    <!-- Версионирование базы данных для JobsService -->
+
+    <changeSet id="jobsService_001_create_type_table" author="buldygin">
+        <createTable tableName="job_type">
+            <column name="id" type="number" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(128)"/>
+            <column name="desc"  type="VARCHAR(256)"/>
+            <column name="enabled" type="BOOLEAN"/>
+        </createTable>
+
+        <insert tableName="job_type">
+            <column name="title">Колмагоров А.Н.</column>
+            <column name="desc">Математика</column>
+            <column name="enabled">1</column>
+        </insert>
+        <insert tableName="job_type">
+            <column name="title">Даль О.И.</column>
+            <column name="desc">Русский язык</column>
+            <column name="enabled">1</column>
+        </insert>
+        <insert tableName="job_type">
+            <column name="title">Нильс Борн</column>
+            <column name="desc">Квантовая механика</column>
+            <column name="enabled">1</column>
+        </insert>
+        <insert tableName="job_type">
+            <column name="title">Майкл Грациано</column>
+            <column name="desc">Искусственный интеллект</column>
+            <column name="enabled">0</column>
+        </insert>
+
+        <rollback>
+            <dropTable tableName="job_type"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="jobsService_002_create_jobs_link" author="buldygin">
+        <createTable tableName="jobs_link">
+            <column name="request_id" type="number"/>
+            <column name="job_id" type="number"/>
+        </createTable>
+
+        <createIndex tableName="jobs_link" indexName="pk" unique="true">
+            <column name="request_id"/>
+            <column name="job_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
