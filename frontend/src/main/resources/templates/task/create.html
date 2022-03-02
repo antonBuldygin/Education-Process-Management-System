@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Создание задания</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Создание задания</h1>
+<div>
+    <a th:href="@{'/task/' + ${groupId}}">
+        <button>Вернуться к списку заданий</button>
+    </a>
+</div>
+<form method="post">
+    <p th:if="${errorsList!= null}">
+        <p class="errorMessage" th:each="error: ${errorsList}" th:text="${error.getField()+' '+error.getDefaultMessage()}"></p>
+    </p>
+    <p>
+        Номер: <input type="number" name="num">
+    </p>
+    <p>
+        Заголовок: <input type="text" name="title">
+    </p>
+    <p>
+        <label>Дата начала</label>
+        <br/>
+        <input name="startDate" type="date"/>
+    </p>
+    <p>
+        <label>Дата окончания</label>
+        <br/>
+        <input name="endDate" type="date"/>
+    </p>
+    <p>
+        <label>Текст задания</label>
+        <br>
+        <textarea name="text"></textarea>
+    </p>
+    <p>
+        <button>Создать задание</button>
+    </p>
+</form>
+
+<style>
+.errorMessage {
+    color: red;
+}
+</style>
+</body>
+</html>

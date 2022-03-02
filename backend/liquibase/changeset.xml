@@ -7,4 +7,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro https://www.liquibase.org/xml/ns/pro/liquibase-pro-4.3.xsd">
 
+    <include file="./liquibase/changeSetPerService/task.xml"/>
+    <include file="./liquibase/changeSetPerService/solution.xml"/>
+
 </databaseChangeLog>

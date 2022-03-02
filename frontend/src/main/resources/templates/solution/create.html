@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Получение задания</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Получение задания</h1>
+<div>
+    <a href="/solution/"><button>К списку решений</button></a>
+</div>
+<form method="post">
+    <p th:if="${errorsList!= null}">
+    <p class="errorMessage" th:each="error: ${errorsList}" th:text="${error.getField()+' '+error.getDefaultMessage()}"></p>
+    </p>
+    <p>
+        <label>Выберите задание</label>
+        <br>
+        <select name="task">
+            <option th:each="task : ${tasks}" th:value="${task.id}" th:text="${task.num} + ' ' + ${task.title}"></option>
+        </select>
+    </p>
+    <p>
+        <button>Получить задание</button>
+    </p>
+</form>
+
+<style>
+.errorMessage {
+    color: red;
+}
+</style>
+</body>
+</html>

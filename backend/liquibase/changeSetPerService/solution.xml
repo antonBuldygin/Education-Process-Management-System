@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro https://www.liquibase.org/xml/ns/pro/liquibase-pro-4.3.xsd">
+
+    <!-- Версионирование базы данных для SolutionService -->
+
+    <changeSet id="solutionService_001_create_solution_table" author="ANeskorodeva">
+        <createTable tableName="solution">
+            <column name="id" type="number" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="task_id" type="number"></column>
+            <column name="student_id" type="number"></column>
+            <column name="text"  type="LONGVARCHAR"/>
+            <column name="status"  type="number"/>
+            <column name="score"  type="number"/>
+            <column name="creation_time" type="datetime"/>
+            <column name="last_action_time" type="datetime"/>
+            <column name="checked_time" type="datetime"/>
+
+        </createTable>
+
+        <createIndex tableName="solution" indexName="id_studentId">
+            <column name="id"/>
+            <column name="student_id"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable tableName="solution"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="solutionService_002_create_solution_action_table" author="ANeskorodeva">
+        <createTable tableName="solution_action">
+            <column name="solution_id" type="number"/>
+            <column name="action_type_id" type="number"/>
+            <column name="action_time" type="datetime"/>
+            <column name="comment" type="VARCHAR(256)"/>
+        </createTable>
+
+        <createIndex tableName="solution_action" indexName="solution_act_type" unique="true">
+            <column name="solution_id"/>
+            <column name="action_type_id"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable tableName="solution_action"/>
+        </rollback>
+
+    </changeSet>
+
+</databaseChangeLog>

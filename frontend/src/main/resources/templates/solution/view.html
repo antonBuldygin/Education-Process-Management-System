@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Просмотр решения</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+<h1 th:text="${'Решение по заданию №' + record.getTask().getNum() + ' ' + record.getTask().getTitle()}"></h1>
+<div>
+    <a href="/solution/">
+        <button>Вернуться к решениям</button>
+    </a>
+    <a th:href="@{'/solution/upload/' + ${record.getId} + '/' + ${record.getTask.getNum}}" th:if="${record.getStatus().getMessage == 'TASK_IN_WORK'}">
+        <button>Загрузить решение</button>
+    </a>
+    <a th:href="@{'/solution/reupload/' + ${record.getId} + '/' + ${record.getTask.getNum}}" th:if="${record.getStatus().getMessage == 'UPLOADED'}">
+        <button>Изменить решение</button>
+    </a>
+    <a th:href="@{'/solution/review/' + ${record.getId}}" th:if="${record.getStatus().getMessage == 'UPLOADED'}">
+        <button>Принять решение на проверку</button>
+    </a>
+    <a th:href="@{'/solution/verify/' + ${record.getId} + '/' + ${record.getTask.getNum}}" th:if="${record.getStatus().getMessage == 'IN_REVIEW'}">
+        <button>Оценить</button>
+    </a>
+    <br>
+</div>
+<div class="solutionView">
+    <div>
+        Статус: <span th:text="${record.getStatus().getMessage()}"/>
+    </div>
+    <br>
+    <div th:if="${record.getScore().getValue()!= null}">
+        Оценка: <span th:text="${record.getScore().getValue()}"/>
+    </div>
+    <br>
+    <div>
+        Задание: <span th:text="${record.getTask().getText()}"/>
+    </div>
+    <br>
+    <div th:if="${record.getText() != null && !record.getText().isEmpty()}">
+        Решение: <span th:text="${record.getText()}"/>
+    </div>
+    <br>
+    <div class="actionHistory" th:if="${record.getActionHistory() != null}">
+        <div>История действий по решению задания:</div>
+        <div class="history-record" th:each="history: ${record.getActionHistory()}">
+            <div class="record-time">
+                Время: <span th:text="${#dates.format(history.getTime(), 'dd-MM-yyyy HH:mm:ss')}"/>
+            </div>
+            <div class="record-type">
+                Тип: <span th:text="${history.getStatus().getMessage()}"/>
+            </div>
+            <div class="record-message" th:if="${history.getComment()!= null && !history.getComment().isEmpty()}">
+                Коментарий: <span th:text="${history.getComment()}"/>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+</body>
+</html>
