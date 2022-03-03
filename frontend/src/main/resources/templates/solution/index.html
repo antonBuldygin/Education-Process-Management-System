@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Решения в работе</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Мои решения</h1>
+<div>
+    <a href="/solution/create"><button>Получить задание</button></a>
+</div>
+<div th:if="${solutions.size() > 0}">
+    <div class="solution" th:each="record : ${solutions}">
+        <h2 th:text="${'Задание №'+record.getTask().getNum() + ' : ' + record.getTask().getTitle()}"></h2>
+        <div>
+            <span th:text="${record.getStatus().getMessage()}"/>
+            <br>
+            <span th:text="${#dates.format(record.getCreationTime(), 'dd-MM-yyyy')}"/>
+        </div>
+        <br>
+        <a th:href="@{/solution/view/{id}(id=${record.getId()})}">Просмотр</a>
+    </div>
+</div>
+<div th:unless="${solutions.size() > 0}">
+    Нет заданий в работе!
+</div>
+</body>
+</html>

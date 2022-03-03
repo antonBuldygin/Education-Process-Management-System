@@ -1,0 +1,15 @@
+spring:
+  profiles.active: JDBC_TEMPLATE
+  datasource:
+    jndi-url: jdbc/backendDbLink
+  h2:
+    console.enabled: true
+
+
+server:
+  port: 8081
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG

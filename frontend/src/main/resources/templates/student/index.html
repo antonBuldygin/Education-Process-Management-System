@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Личный кабинет</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Личный кабинет</h1>
+<div>
+    <a href="/solution/"><button>Мои решения</button></a>
+    <a th:href="@{/task/{id}(id=${groupId})}"><button>Список заданий</button></a>
+</div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Загрузка решения</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+<h1 th:text="${'Загрузка решения по заданию №' + taskNum}"></h1>
+<div>
+    <a href="/solution/"><button>К списку решений</button></a>
+</div>
+<form method="post">
+    <p th:if="${errorsList!= null}">
+    <p class="errorMessage" th:each="error: ${errorsList}" th:text="${error.getField()+' '+error.getDefaultMessage()}"></p>
+    </p>
+    <p>
+        <label>Текст решения</label>
+        <br>
+        <textarea name="text" th:text=${record.getText} th:if="${record != null}"></textarea>
+        <textarea name="text" th:unless="${record != null}"></textarea>
+    </p>
+    <p>
+        <label>Комментарий</label>
+        <br>
+
+        <textarea name="comment"></textarea>
+
+    </p>
+    <p>
+        <button>Загрузить решение</button>
+    </p>
+</form>
+
+<style>
+.errorMessage {
+    color: red;
+}
+</style>
+</body>
+</html>
