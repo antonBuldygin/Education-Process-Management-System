@@ -92,9 +92,6 @@ public class InMemoryStubGroupsService implements GroupsService {
                 .teachers(getJobsById(groupForm))
                 .actionHistory(asList(Action.builder()
                         .time(new Timestamp(new Date().getTime()))
-                        .typeCode(1L)
-                        .typeMessage("Создание")
-                        .message("Группа создана")
                         .build()))
                 .build();
 
