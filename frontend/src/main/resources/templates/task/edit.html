@@ -7,7 +7,7 @@
 <body>
 <h1>Редактирование задания</h1>
 <div>
-    <a th:href="@{'/task/' + ${record.getGroupId()}}">
+    <a th:href="@{'/' + ${role} + '/task'}">
         <button>Вернуться к списку заданий</button>
     </a>
 </div>
@@ -37,7 +37,7 @@
         <textarea name="text" th:text="${record.getText()}"></textarea>
     </p>
     <p>
-        <input name="groupId" type="hidden" th:value="${record.getGroupId()}"/>
+        <input name="groupId" th:value="${record.getGroupId()}"/>
     </p>
     <p>
         <button>Обновить задание</button>

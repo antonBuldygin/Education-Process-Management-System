@@ -2,6 +2,8 @@ package ru.edu.project.backend.api.solutions;
 
 
 import ru.edu.project.backend.api.common.AcceptorArgument;
+import ru.edu.project.backend.api.common.PagedView;
+import ru.edu.project.backend.api.common.SolutionSearch;
 
 import java.util.List;
 
@@ -71,4 +73,13 @@ public interface SolutionService {
      * @return list of solutions
      */
     List<SolutionInfo> getSolutionsByTask(long taskId);
+
+    /**
+     * Searching for solutions.
+     *
+     * @param recordSearch
+     * @return list
+     */
+    @AcceptorArgument
+    PagedView<SolutionInfo> searchSolutions(SolutionSearch recordSearch);
 }

@@ -7,7 +7,7 @@
 <body>
 <h1 th:text="${'Задание №' + record.getNum() + ' ' + record.getTitle()}"></h1>
 <div>
-    <a th:href="@{'/task/' + ${record.getGroupId()}}">
+    <a th:href="@{'/' + ${role} + '/task/' + ${record.getGroupId()}}">
         <button>Вернуться к списку заданий</button>
     </a>
 </div>
@@ -26,10 +26,10 @@
     </div>
     <br>
     <div>
-        <a th:href="@{'/task/edit/' + ${record.getId}}">
+        <a th:href="@{'/' + ${role} + '/task/edit/' + ${record.getId}}">
             <button>Редактировать</button>
         </a>
-        <a th:href="@{'/task/delete/' + ${record.getId} + '/' + ${record.getGroupId}}">
+        <a th:href="@{'/' + ${role} + '/task/delete/' + ${record.getId} + '/' + ${record.getGroupId}}">
             <button>Удалить</button>
         </a>
     </div>

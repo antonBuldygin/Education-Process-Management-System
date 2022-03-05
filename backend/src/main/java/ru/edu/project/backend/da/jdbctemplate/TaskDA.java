@@ -169,6 +169,16 @@ public class TaskDA implements TaskDALayer {
     }
 
     /**
+     * Getting all tasks.
+     *
+     * @return list of tasks
+     */
+    @Override
+    public List<TaskInfo> getAllTasks() {
+        return null;
+    }
+
+    /**
      * Get task by id.
      *
      * @param id

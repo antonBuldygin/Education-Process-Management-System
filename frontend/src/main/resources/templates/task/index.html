@@ -7,7 +7,8 @@
 <body>
 <h1>Список заданий</h1>
 <div>
-    <a th:href="@{/task/create/{groupId}(groupId=${groupId})}">
+    <a th:href="@{'/' + ${role} + '/task/create/'}"
+       th:if="${role == 'teacher' || role == 'admin'}">
         <button>Добавить задание</button>
     </a>
 </div>
@@ -20,10 +21,11 @@
             Дата окончания: <span th:text="${#dates.format(record.getEndDate(), 'dd-MM-yyyy')}"/>
         </div>
         <br>
-        <a th:href="@{/task/view/{id}(id=${record.getId()})}">
+        <a th:href="@{'/' + ${role} + '/task/view/' + ${record.getId()}}">
             <button>Просмотр</button>
         </a>
-        <a th:href="@{'/task/delete/' + ${record.getId} + '/' + ${record.getGroupId}}">
+        <a th:href="@{'/' + ${role} + '/task/delete/' + ${record.getId} + '/' + ${record.getGroupId}}"
+           th:if="${role == 'teacher' || role == 'admin'}">
             <button>Удаление</button>
         </a>
     </div>

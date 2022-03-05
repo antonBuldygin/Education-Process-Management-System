@@ -7,13 +7,20 @@
 <body>
 <h1>Создание задания</h1>
 <div>
-    <a th:href="@{'/task/' + ${groupId}}">
+    <a th:href="@{'/' + ${role} + '/task'}">
         <button>Вернуться к списку заданий</button>
     </a>
 </div>
 <form method="post">
     <p th:if="${errorsList!= null}">
         <p class="errorMessage" th:each="error: ${errorsList}" th:text="${error.getField()+' '+error.getDefaultMessage()}"></p>
+    </p>
+    <p>
+        <label>Выберите группу</label>
+        <br>
+        <select name="group">
+            <option th:each="group : ${groups}" th:value="${group.id}" th:text="${group.num}"></option>
+        </select>
     </p>
     <p>
         Номер: <input type="number" name="num">

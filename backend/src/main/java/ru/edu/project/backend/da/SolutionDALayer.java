@@ -2,6 +2,8 @@ package ru.edu.project.backend.da;
 
 
 import ru.edu.project.backend.api.action.Action;
+import ru.edu.project.backend.api.common.PagedView;
+import ru.edu.project.backend.api.common.SolutionSearch;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
 
 import java.util.List;
@@ -15,6 +17,14 @@ public interface SolutionDALayer {
      * @return SolutionInfo
      */
     List<SolutionInfo> getSolutionsByStudent(long studentId);
+
+    /**
+     * Searching for solutions.
+     *
+     * @param recordSearch
+     * @return list
+     */
+    PagedView<SolutionInfo> search(SolutionSearch recordSearch);
 
     /**
      * Getting student's solution by task id.

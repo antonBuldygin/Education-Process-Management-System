@@ -53,5 +53,9 @@
         </rollback>
 
     </changeSet>
-
+    <changeSet id="solutionService_003_create_solution_sequence" author="ANeskorodeva">
+        <createSequence sequenceName="solution_id_sequence"
+                        startValue="1"
+        />
+    </changeSet>
 </databaseChangeLog>

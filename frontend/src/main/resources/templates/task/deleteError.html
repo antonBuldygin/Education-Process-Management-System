@@ -6,13 +6,13 @@
 </head>
 <body>
 <h1>Невозможно удалить задание - по нему уже есть решения!</h1>
-<a th:href="@{'/task/' + ${groupId}}">
+<a th:href="@{'/' + ${role} + '/task/' + ${groupId}}">
     <button>Вернуться к списку заданий</button>
 </a>
 <div th:if="${solutions.size() > 0}">
     <div class="solution" th:each="record : ${solutions}">
-        <h2 th:text="${'Задание №'+record.getTask().getNum() + ' : ' + record.getTask().getTitle()}"></h2>
-        <a th:href="@{/solution/view/{id}(id=${record.getId()})}">Просмотр</a>
+        <h2 th:text="${'Задание №'+record.getTaskNum() + ' : ' + record.getTaskTitle()}"></h2>
+        <a th:href="@{'/' + ${role} + '/solution/view/' + ${record.getId()}}">Просмотр</a>
     </div>
 </div>
 </body>

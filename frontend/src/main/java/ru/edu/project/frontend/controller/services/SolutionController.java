@@ -1,34 +1,49 @@
-package ru.edu.project.frontend.controller;
+package ru.edu.project.frontend.controller.services;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
+import ru.edu.project.backend.api.common.SolutionSearch;
 import ru.edu.project.backend.api.solutions.SolutionForm;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
 import ru.edu.project.backend.api.solutions.SolutionReviewForm;
 import ru.edu.project.backend.api.solutions.SolutionService;
 import ru.edu.project.backend.api.tasks.TaskService;
+import ru.edu.project.frontend.controller.forms.solutions.SolutionCreateForm;
+import ru.edu.project.frontend.controller.forms.solutions.SolutionUploadForm;
+import ru.edu.project.frontend.controller.forms.solutions.SolutionVerifyForm;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import java.util.Arrays;
+import java.util.Optional;
 
-
-@RequestMapping("/solution")
-@Controller
+@Component
 public class SolutionController {
+
+    /**
+     * List of sorting fields.
+     */
+    public static final String ORDER_FIELDS = "orderFields";
+
+    /**
+     * Current sorting field.
+     */
+    public static final String ORDER_BY_FIELD = "orderByField";
+
+    /**
+     * Sorting direction.
+     */
+    public static final String IS_ASC = "isAsc";
+
+    /**
+     * Solution.
+     */
+    public static final String RECORD_ATTR = "record";
 
     /**
      * Model's attribute for storing errors.
@@ -43,7 +58,12 @@ public class SolutionController {
     /**
      * Model's attribute for storing solutions.
      */
-    public static final String SOLUTIONS_ATTR = "solutions";
+    public static final String SOLUTIONS_ATTR = "solutionsPage";
+
+    /**
+     * Model's attribute for storing role.
+     */
+    public static final String ROLE = "role";
 
     /**
      * Solution service.
@@ -57,24 +77,45 @@ public class SolutionController {
     @Autowired
     private TaskService taskService;
 
+
     /**
      * Displaying student's solutions.
      *
-     * @param model
-     * @return view
+     * @param searchBy
+     * @param isAsc
+     * @param page
+     * @param perPage
+     * @param role
+     * @return modelAndView
      */
-    @GetMapping("/")
-    public String index(final Model model) {
+    public ModelAndView index(final String searchBy,
+                              final boolean isAsc,
+                              final int page,
+                              final int perPage,
+                              final String role
+    ) {
+
         long studentId = 1; //todo в дальнейшим заменим на id пользователя
 
-        model.addAttribute(
-                SOLUTIONS_ATTR,
-                solutionService.getSolutionsByStudent(studentId)
+        ModelAndView model = new ModelAndView("solution/index");
+        SearchFields searchByField = SearchFields.byString(searchBy);
+
+        model.addObject(
+                ROLE,
+                role
         );
 
-        return "solution/index";
-    }
+        model.addObject(
+                SOLUTIONS_ATTR,
+                solutionService.searchSolutions(SolutionSearch.by(studentId, searchByField.getField(), isAsc, page - 1, perPage))
+        );
 
+        model.addObject(ORDER_FIELDS, SearchFields.values());
+        model.addObject(ORDER_BY_FIELD, searchByField);
+        model.addObject(IS_ASC, isAsc);
+
+        return model;
+    }
 
 
 
@@ -82,10 +123,10 @@ public class SolutionController {
      * View solution by id.
      *
      * @param solutionId
+     * @param role
      * @return modelAndView
      */
-    @GetMapping("/view/{id}")
-    public ModelAndView view(final @PathVariable("id") Long solutionId) {
+    public ModelAndView view(final Long solutionId, final String role) {
         long studentId = 1; //todo student id
 
         ModelAndView model = new ModelAndView("solution/view");
@@ -103,21 +144,34 @@ public class SolutionController {
                 detailedInfo
         );
 
+        model.addObject(
+                ROLE,
+                role
+        );
+
         return model;
     }
+
 
 
     /**
      * View for creating new solution.
      *
      * @param model
+     * @param role
      * @return view
      */
-    @GetMapping("/create")
-    public String createForm(final Model model) {
+    public String createForm(final Model model, final String role) {
         long studentId = 1; //todo в дальнейшим заменим на id пользователя
         long groupId = 1; //todo добавить получение группы по студенту
+
+        model.addAttribute(
+                ROLE,
+                role
+        );
+
         model.addAttribute(TASKS_ATTR, taskService.getTasksByGroup(1)); //todo taskService.getAvailable(groupId));
+
         return "solution/create";
     }
 
@@ -128,14 +182,14 @@ public class SolutionController {
      * @param form
      * @param bindingResult
      * @param model
+     * @param role
      * @return redirect url
      */
-    @PostMapping("/create")
     public String createFormProcessing(
-            @Valid
-            @ModelAttribute final CreateForm form,
+            final SolutionCreateForm form,
             final BindingResult bindingResult,
-            final Model model
+            final Model model,
+            final String role
     ) {
         if (bindingResult.hasErrors()) {
             model.addAttribute(
@@ -143,26 +197,19 @@ public class SolutionController {
                     bindingResult.getAllErrors()
             );
 
-            return createForm(model);
+            return createForm(model, role);
         }
 
         final long studentId = 1; //todo student id
 
+        model.addAttribute(
+                ROLE,
+                role
+        );
+
         SolutionInfo solution = solutionService.takeToWork(studentId, form.getTask());
 
-        return "redirect:/solution/?created=" + solution.getId();
-    }
-
-    @Getter
-    @Setter
-    public static class CreateForm {
-
-        /**
-         * Task.
-         */
-        @NotNull
-        private Long task;
-
+        return "redirect:/" + role + "/solution/?created=" + solution.getId();
     }
 
     /**
@@ -170,11 +217,13 @@ public class SolutionController {
      *
      * @param solutionId
      * @param taskNum
+     * @param role
      * @return view
      */
-    @GetMapping("/reupload/{solutionId}/{taskNum}")
-    public ModelAndView reuploadForm(@PathVariable("solutionId") final Long solutionId,
-                                   @PathVariable("taskNum") final Integer taskNum) {
+    public ModelAndView reuploadForm(final Long solutionId,
+                                     final Integer taskNum,
+                                     final String role
+    ) {
 
         ModelAndView model = new ModelAndView("solution/upload");
 
@@ -189,6 +238,11 @@ public class SolutionController {
                 detailedInfo
         );
 
+        model.addObject(
+                ROLE,
+                role
+        );
+
         return model;
     }
 
@@ -200,18 +254,23 @@ public class SolutionController {
      * @param taskNum
      * @param bindingResult
      * @param model
+     * @param role
      * @return redirect url
      */
-    @PostMapping("/reupload/{solutionId}/{taskNum}")
     public String reuploadFormProcessing(
-            @Valid
-            @ModelAttribute final UploadForm form,
-            @PathVariable("solutionId") final Long solutionId,
-            @PathVariable("taskNum") final Integer taskNum,
+            final SolutionUploadForm form,
+            final Long solutionId,
+            final Integer taskNum,
             final BindingResult bindingResult,
-            final Model model
+            final Model model,
+            final String role
     ) {
-        return uploadFormProcessing(form, solutionId, taskNum, bindingResult, model);
+        model.addAttribute(
+                ROLE,
+                role
+        );
+
+        return uploadFormProcessing(form, solutionId, taskNum, bindingResult, model, role);
     }
 
     /**
@@ -219,13 +278,20 @@ public class SolutionController {
      *
      * @param solutionId
      * @param taskNum
+     * @param role
      * @return view
      */
-    @GetMapping("/upload/{solutionId}/{taskNum}")
-    public ModelAndView uploadForm(@PathVariable("solutionId") final Long solutionId,
-                                   @PathVariable("taskNum") final Integer taskNum) {
+    public ModelAndView uploadForm(final Long solutionId,
+                                   final Integer taskNum,
+                                   final String role
+    ) {
 
         ModelAndView model = new ModelAndView("solution/upload");
+
+        model.addObject(
+                ROLE,
+                role
+        );
 
         model.addObject(
                 "taskNum",
@@ -244,16 +310,16 @@ public class SolutionController {
      * @param taskNum
      * @param bindingResult
      * @param model
+     * @param role
      * @return redirect url
      */
-    @PostMapping("/upload/{solutionId}/{taskNum}")
     public String uploadFormProcessing(
-            @Valid
-            @ModelAttribute final UploadForm form,
-            @PathVariable("solutionId") final Long solutionId,
-            @PathVariable("taskNum") final Integer taskNum,
+            final SolutionUploadForm form,
+            final Long solutionId,
+            final Integer taskNum,
             final BindingResult bindingResult,
-            final Model model
+            final Model model,
+            final String role
     ) {
         if (bindingResult.hasErrors()) {
             model.addAttribute(
@@ -261,10 +327,15 @@ public class SolutionController {
                     bindingResult.getAllErrors()
             );
 
-            return uploadForm(solutionId, taskNum).getViewName();
+            return uploadForm(solutionId, taskNum, role).getViewName();
         }
 
         final long studentId = 1; //todo student id
+
+        model.addAttribute(
+                ROLE,
+                role
+        );
 
         SolutionInfo solution = solutionService.uploadSolution(SolutionForm.builder()
                 .solutionId(solutionId)
@@ -273,24 +344,7 @@ public class SolutionController {
                 .comment(form.getComment())
                 .build());
 
-        return "redirect:/solution/view/" + solution.getId();
-    }
-
-    @Getter
-    @Setter
-    public static class UploadForm {
-
-        /**
-         * Text.
-         */
-        @NotNull
-        private String text;
-
-        /**
-         * Comment.
-         */
-        private String comment;
-
+        return "redirect:/" + role + "/solution/view/" + solution.getId();
     }
 
     /**
@@ -298,14 +352,19 @@ public class SolutionController {
      *
      * @param model
      * @param solutionId
+     * @param role
      * @return view
      */
-    @GetMapping("/review/{solutionId}")
-    public String reviewForm(final Model model, @PathVariable("solutionId") final Long solutionId) {
+    public String reviewForm(final Model model, final Long solutionId, final String role) {
+
+        model.addAttribute(
+                ROLE,
+                role
+        );
 
         solutionService.takeForReview(solutionId);
 
-        return "redirect:/solution/view/" + solutionId;
+        return "redirect:/" + role + "/solution/view/" + solutionId;
     }
 
     /**
@@ -313,13 +372,20 @@ public class SolutionController {
      *
      * @param solutionId
      * @param taskNum
+     * @param role
      * @return view
      */
-    @GetMapping("/verify/{solutionId}/{taskNum}")
-    public ModelAndView verifyForm(@PathVariable("solutionId") final Long solutionId,
-                                   @PathVariable("taskNum") final Integer taskNum) {
+    public ModelAndView verifyForm(final Long solutionId,
+                                   final Integer taskNum,
+                                   final String role
+    ) {
 
         ModelAndView model = new ModelAndView("solution/verify");
+
+        model.addObject(
+                ROLE,
+                role
+        );
 
         model.addObject(
                 "taskNum",
@@ -338,16 +404,16 @@ public class SolutionController {
      * @param taskNum
      * @param bindingResult
      * @param model
+     * @param role
      * @return redirect url
      */
-    @PostMapping("/verify/{solutionId}/{taskNum}")
     public String verifyFormProcessing(
-            @Valid
-            @ModelAttribute final VerifyForm form,
-            @PathVariable("solutionId") final Long solutionId,
-            @PathVariable("taskNum") final Integer taskNum,
+            final SolutionVerifyForm form,
+            final Long solutionId,
+            final Integer taskNum,
             final BindingResult bindingResult,
-            final Model model
+            final Model model,
+            final String role
     ) {
         if (bindingResult.hasErrors()) {
             model.addAttribute(
@@ -355,10 +421,15 @@ public class SolutionController {
                     bindingResult.getAllErrors()
             );
 
-            return verifyForm(solutionId, taskNum).getViewName();
+            return verifyForm(solutionId, taskNum, role).getViewName();
         }
 
         final long studentId = 1; //todo student id
+
+        model.addAttribute(
+                ROLE,
+                role
+        );
 
         SolutionInfo solution = solutionService.verify(SolutionReviewForm.builder()
                 .solutionId(solutionId)
@@ -367,35 +438,52 @@ public class SolutionController {
                 .comment(form.getComment())
                 .build());
 
-        return "redirect:/solution/view/" + solution.getId();
+        return "redirect:/" + role + "/solution/view/" + solution.getId();
     }
 
+
+    @AllArgsConstructor
     @Getter
-    @Setter
-    public static class VerifyForm {
+    public enum SearchFields {
 
         /**
-         * Max score value.
+         * Searching by id.
          */
-        private static final int MAX_SCORE = 100;
+        TASK_NUM("id", "Id"),
 
         /**
-         * Min score value.
+         * Searching by creating date.
          */
-        private static final int MIN_SCORE = 0;
+        CREATED_AT("creationTime", "дата создания"),
 
         /**
-         * Score.
+         * Searching by last action.
          */
-        @NotNull
-        @Max(MAX_SCORE)
-        @Min(MIN_SCORE)
-        private Integer score;
+        LAST_ACTION_AT("lastActionTime", "последнее обновление");
 
         /**
-         * Comment.
+         * Searching by status.
          */
-        private String comment;
+        private final String field;
 
+        /**
+         * Field name.
+         */
+        private final String msg;
+
+        /**
+         * Searching field by string from request.
+         *
+         * @param searchBy
+         * @return enum
+         */
+        public static SearchFields byString(final String searchBy) {
+            Optional<SearchFields> searchFields = Arrays
+                    .stream(values())
+                    .filter(e -> e.name().equals(searchBy))
+                    .findFirst();
+
+            return searchFields.orElse(CREATED_AT);
+        }
     }
 }

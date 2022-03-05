@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.edu.project.backend.api.common.PagedView;
+import ru.edu.project.backend.api.common.SolutionSearch;
 import ru.edu.project.backend.api.solutions.SolutionForm;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
 import ru.edu.project.backend.api.solutions.SolutionReviewForm;
@@ -48,6 +50,20 @@ public class SolutionController implements SolutionService {
     public List<SolutionInfo> getSolutionsByTask(@PathVariable("id") final long taskId) {
         return null;
     }
+
+    /**
+     * Searching for solutions.
+     *
+     * @param recordSearch
+     * @return list
+     */
+    @Override
+    @PostMapping("/searchSolutions")
+    public PagedView<SolutionInfo> searchSolutions(@RequestBody final SolutionSearch recordSearch) {
+        return delegate.searchSolutions(recordSearch);
+    }
+
+
     /**
      * Getting student's solution by task id.
      *

@@ -8,7 +8,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Service;
 import ru.edu.project.backend.api.action.Action;
+import ru.edu.project.backend.api.common.PagedView;
 import ru.edu.project.backend.api.common.Score;
+import ru.edu.project.backend.api.common.SolutionSearch;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
 import ru.edu.project.backend.da.SolutionDALayer;
 import ru.edu.project.backend.model.SolutionStatus;
@@ -114,6 +116,17 @@ public class SolutionDA implements SolutionDALayer {
     @Override
     public List<SolutionInfo> getSolutionsByStudent(final long studentId) {
         return jdbcTemplate.query(QUERY_SOLUTIONS_BY_STUDENT_ID, this::solutionRowMapper, studentId);
+    }
+
+    /**
+     * Searching for solutions.
+     *
+     * @param recordSearch
+     * @return list
+     */
+    @Override
+    public PagedView<SolutionInfo> search(final SolutionSearch recordSearch) {
+        return null;
     }
 
     /**

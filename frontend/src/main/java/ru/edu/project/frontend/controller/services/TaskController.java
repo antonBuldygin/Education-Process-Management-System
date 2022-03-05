@@ -1,36 +1,21 @@
-package ru.edu.project.frontend.controller;
+package ru.edu.project.frontend.controller.services;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
 import ru.edu.project.backend.api.solutions.SolutionService;
 import ru.edu.project.backend.api.tasks.TaskForm;
 import ru.edu.project.backend.api.tasks.TaskInfo;
 import ru.edu.project.backend.api.tasks.TaskService;
+import ru.edu.project.frontend.controller.forms.tasks.TaskCreateForm;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-@RequestMapping("/task")
-@Controller
+@Component
 public class TaskController {
     /**
      * Model's attribute for storing errors.
@@ -46,6 +31,11 @@ public class TaskController {
      * Model's attribute for storing tasks.
      */
     public static final String TASKS_ATTR = "tasks";
+
+    /**
+     * Model's attribute for storing role.
+     */
+    public static final String ROLE = "role";
 
     /**
      * Task service.
@@ -64,20 +54,32 @@ public class TaskController {
      *
      * @param groupId
      * @param model
+     * @param role
      * @return view
      */
-    @GetMapping("/{groupId}")
-    public String index(final Model model, @PathVariable("groupId") final Long groupId) {
+    public String index(final Model model, final String groupId, final String role) {
+
+        model.addAttribute(
+                ROLE,
+                role
+        );
 
         model.addAttribute(
                 "groupId",
                 groupId
         );
 
-        model.addAttribute(
-                TASKS_ATTR,
-                taskService.getTasksByGroup(groupId)
-        );
+        if (groupId.equals("all")) {
+            model.addAttribute(
+                    TASKS_ATTR,
+                    taskService.getAllTasks()
+            );
+        } else {
+            model.addAttribute(
+                    TASKS_ATTR,
+                    taskService.getTasksByGroup(Long.valueOf(groupId))
+            );
+        }
 
         return "task/index";
     }
@@ -86,10 +88,10 @@ public class TaskController {
      * View task by id.
      *
      * @param taskId
+     * @param role
      * @return modelAndView
      */
-    @GetMapping("/view/{id}")
-    public ModelAndView view(@PathVariable("id") final Long taskId) {
+    public ModelAndView view(final Long taskId, final String role) {
 
         ModelAndView model = new ModelAndView("task/view");
 
@@ -98,6 +100,11 @@ public class TaskController {
         model.addObject(
                 "record",
                 taskInfo
+        );
+
+        model.addObject(
+                ROLE,
+                role
         );
 
         return model;
@@ -109,14 +116,21 @@ public class TaskController {
      * @param groupId
      * @param model
      * @param taskId
+     * @param role
      * @return modelAndView
      */
-    @GetMapping("/delete/{id}/{groupId}")
     public String delete(final Model model,
-                         @PathVariable("id") final Long taskId,
-                         @PathVariable("groupId") final Long groupId) {
+                         final Long taskId,
+                         final Long groupId,
+                         final String role
+    ) {
 
         List<SolutionInfo> solutionsByTask = solutionService.getSolutionsByTask(taskId);
+
+        model.addAttribute(
+                ROLE,
+                role
+        );
 
         if (solutionsByTask != null) {
             model.addAttribute(
@@ -132,7 +146,7 @@ public class TaskController {
 
         int deletedInfo = taskService.deleteById(taskId);
 
-        return "redirect:/task/" + groupId;
+        return "redirect:/" + role + "/task/" + groupId;
     }
 
 
@@ -142,11 +156,18 @@ public class TaskController {
      *
      * @param groupId
      * @param model
+     * @param role
      * @return view
      */
-    @GetMapping("/create/{groupId}")
     public String createForm(final Model model,
-                             @PathVariable("groupId") final Long groupId) {
+                             final Long groupId,
+                             final String role
+    ) {
+
+        model.addAttribute(
+                ROLE,
+                role
+        );
 
         model.addAttribute("groupId",
                 groupId);
@@ -161,24 +182,30 @@ public class TaskController {
      * @param groupId
      * @param bindingResult
      * @param model
+     * @param role
      * @return redirect url
      */
-    @PostMapping("/create/{groupId}")
     public String createFormProcessing(
-            @Valid
-            @ModelAttribute final CreateForm form,
-            @PathVariable("groupId") final Long groupId,
+            final TaskCreateForm form,
+            final Long groupId,
             final BindingResult bindingResult,
-            final Model model
+            final Model model,
+            final String role
     ) {
+
         if (bindingResult.hasErrors()) {
             model.addAttribute(
                     FORM_ERROR_ATTR,
                     bindingResult.getAllErrors()
             );
 
-            return createForm(model, groupId);
+            return createForm(model, groupId, role);
         }
+
+        model.addAttribute(
+                ROLE,
+                role
+        );
 
         TaskInfo taskInfo = taskService.createTask(TaskForm.builder()
                         .groupId(groupId)
@@ -189,91 +216,27 @@ public class TaskController {
                         .endDate(form.getEndDate())
                         .build());
 
-        return "redirect:/task/" + groupId + "/?created=" + taskInfo.getId();
+        return "redirect:/" + role + "/task/" + groupId + "/?created=" + taskInfo.getId();
     }
 
-    @Getter
-    @Setter
-    public static class CreateForm {
-
-        /**
-         * Format for date parsing.
-         */
-        private static final DateFormat FORMAT;
-
-        static {
-            FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-        }
-
-        /**
-         * GroupId.
-         */
-        private Long groupId;
-
-        /**
-         * Number.
-         */
-        @NotNull
-        private Integer num;
-
-        /**
-         * Task title.
-         */
-        @NotNull
-        private String title;
-
-        /**
-         * Task text.
-         */
-        private String text;
-
-        /**
-         * Start date of task.
-         */
-        @NotEmpty
-        private String startDate;
-
-        /**
-         * End date of task.
-         */
-        @NotEmpty
-        private String endDate;
-
-        /**
-         * Getting calendar object for startDate.
-         *
-         * @return Timestamp
-         */
-        @SneakyThrows
-        public Timestamp getStartDate() {
-            Date parsed = FORMAT.parse(startDate);
-            return new Timestamp(parsed.getTime());
-        }
-
-        /**
-         * Getting calendar object for endDate.
-         *
-         * @return Timestamp
-         */
-        @SneakyThrows
-        public Timestamp getEndDate() {
-            Date parsed = FORMAT.parse(endDate);
-            return new Timestamp(parsed.getTime());
-        }
-    }
 
     /**
      * View for editing new task.
      *
      * @param taskId
+     * @param role
      * @return view
      */
-    @GetMapping("/edit/{taskId}")
-    public ModelAndView editForm(@PathVariable("taskId") final Long taskId) {
+    public ModelAndView editForm(final Long taskId, final String role) {
 
         ModelAndView model = new ModelAndView("task/edit");
 
         TaskInfo taskInfo = taskService.getById(taskId);
+
+        model.addObject(
+                ROLE,
+                role
+        );
 
         model.addObject(
                 "record",
@@ -291,15 +254,15 @@ public class TaskController {
      * @param form
      * @param bindingResult
      * @param model
+     * @param role
      * @return redirect url
      */
-    @PostMapping("/edit/{taskId}")
     public String editFormProcessing(
-            @Valid
-            @ModelAttribute final CreateForm form,
-            @PathVariable("taskId") final Long taskId,
+            final TaskCreateForm form,
+            final Long taskId,
             final BindingResult bindingResult,
-            final Model model
+            final Model model,
+            final String role
     ) {
         if (bindingResult.hasErrors()) {
             model.addAttribute(
@@ -307,8 +270,13 @@ public class TaskController {
                     bindingResult.getAllErrors()
             );
 
-            return createForm(model, taskId);
+            return createForm(model, taskId, role);
         }
+
+        model.addAttribute(
+                ROLE,
+                role
+        );
 
         TaskInfo taskInfo = taskService.editTask(TaskForm.builder()
                         .id(taskId)
@@ -320,7 +288,7 @@ public class TaskController {
                         .endDate(form.getEndDate())
                         .build());
 
-        return "redirect:/task/edit/" + taskInfo.getId();
+        return "redirect:/" + role + "/task/edit/" + taskInfo.getId();
     }
 
 

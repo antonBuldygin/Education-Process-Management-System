@@ -76,6 +76,16 @@ public class TaskController implements TaskService {
     }
 
     /**
+     * Getting all tasks.
+     *
+     * @return list of tasks
+     */
+    @Override
+    public List<TaskInfo> getAllTasks() {
+        return delegate.getAllTasks();
+    }
+
+    /**
      * Get task by id.
      *
      * @param id

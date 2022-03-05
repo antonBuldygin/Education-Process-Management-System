@@ -3,25 +3,90 @@
 <head>
     <title>Решения в работе</title>
     <link th:href="@{/css/styles.css}" rel="stylesheet">
+    <link th:href="@{/css/stylesAdmin.css}" rel="stylesheet">
 </head>
 <body>
-<h1>Мои решения</h1>
+<h1>Решения</h1>
 <div>
-    <a href="/solution/create"><button>Получить задание</button></a>
+    <a th:if="${role == 'student'}"
+       th:href="@{'/' + ${role} + '/solution/create'}"><button>Получить задание</button></a>
 </div>
-<div th:if="${solutions.size() > 0}">
-    <div class="solution" th:each="record : ${solutions}">
-        <h2 th:text="${'Задание №'+record.getTask().getNum() + ' : ' + record.getTask().getTitle()}"></h2>
-        <div>
-            <span th:text="${record.getStatus().getMessage()}"/>
-            <br>
-            <span th:text="${#dates.format(record.getCreationTime(), 'dd-MM-yyyy')}"/>
-        </div>
-        <br>
-        <a th:href="@{/solution/view/{id}(id=${record.getId()})}">Просмотр</a>
+<div th:if="${solutionsPage.getTotal() > 0}">
+    <div>
+        <form>
+            <p>Решений всего <span th:text="${solutionsPage.getTotal()}"/></p>
+            <p>Страница <span th:text="${solutionsPage.getPage()+1}"/> из <span
+                    th:text="${solutionsPage.getTotalPages()}"/>
+            </p>
+            <p>
+                Страница: <input name="page" type="number" th:value="${solutionsPage.getPage()+1}" min="1"
+                                 th:attr="max=${solutionsPage.getTotalPages()}"/>
+            </p>
+            <p>
+                <a th:if="${solutionsPage.getPage() > 0}"
+                   th:href="@{'/' + ${role} + '/solution/' + '(page=${solutionsPage.getPage()}, perPage=${solutionsPage.getPerPage()}, searchBy=${orderByField.getField()}, direct=${isAsc})'}">&larr;
+                    Предыдущая страница</a>
+                <a th:if="${solutionsPage.getPage()+1 < solutionsPage.getTotalPages()}"
+                   th:href="@{'/' + ${role} + '/solution/' + '(page=${solutionsPage.getPage()+2}, perPage=${solutionsPage.getPerPage()}, searchBy=${orderByField.name()}, direct=${isAsc})'}">Следующая
+                    страница &rarr;</a>
+
+            </p>
+
+            <p>
+                Сортировка по:
+                <select name="searchBy">
+                    <option th:each="field : ${orderFields}" th:value="${field.name()}" th:text="${field.getMsg()}"
+                            th:selected="${field == orderByField}"></option>
+                </select>
+            </p>
+
+            <p>
+                Сортировка по:
+                <select name="direct">
+                    <option th:selected="${isAsc}" value="1">возрастанию</option>
+                    <option th:selected="${!isAsc}" value="0">убыванию</option>
+                </select>
+            </p>
+
+            <p>
+                Записей на страницу:
+                <select name="perPage">
+                    <option th:selected="${5 == solutionsPage.getPerPage()}">5</option>
+                    <option th:selected="${10 == solutionsPage.getPerPage()}">10</option>
+                    <option th:selected="${50 == solutionsPage.getPerPage()}">50</option>
+                </select>
+            </p>
+            <p>
+                <button>Перейти</button>
+            </p>
+        </form>
     </div>
+    <table class="solutionTable">
+        <thead>
+        <th>Номер задания</th>
+        <th>Заголовок задания</th>
+        <th>Студент</th>
+        <th>Дата создания</th>
+        <th>Статус</th>
+        <th>Оценка</th>
+        <th>Последнее обновление</th>
+        <th>Действия</th>
+        </thead>
+        <tr class="solution" th:each="record : ${solutionsPage.getElements()}">
+            <td th:text="${record.getTaskNum()}"/>
+            <td th:text="${record.getTaskTitle()}"/>
+            <td th:text="${record.getStudentName()}"/>
+            <td th:text="${#dates.format(record.getCreationTime(), 'dd-MM-yyyy')}"/>
+            <td th:text="${record.getStatus().getMessage()}"/>
+            <td th:text="${record.getScore().getValue()}"/>
+            <td th:text="${#dates.format(record.getLastActionTime(), 'dd-MM-yyyy')}"/>
+            <td>
+                <a target="_blank" th:href="@{'/' + ${role} + '/solution/view/' + ${record.getId()}}">Просмотр</a>
+            </td>
+        </tr>
+    </table>
 </div>
-<div th:unless="${solutions.size() > 0}">
+<div th:unless="${solutionsPage.getTotal() > 0}">
     Нет заданий в работе!
 </div>
 </body>

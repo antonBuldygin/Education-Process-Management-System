@@ -5,26 +5,33 @@
     <link th:href="@{/css/styles.css}" rel="stylesheet">
 </head>
 <body>
-<h1 th:text="${'Решение по заданию №' + record.getTask().getNum() + ' ' + record.getTask().getTitle()}"></h1>
+<h1 th:text="${'Решение по заданию №' + record.getTaskNum() + ' ' + record.getTaskTitle()}"></h1>
 <div>
-    <a href="/solution/">
+    <a th:href="@{'/' + ${role} + '/solution'}">
         <button>Вернуться к решениям</button>
     </a>
-    <a th:href="@{'/solution/upload/' + ${record.getId} + '/' + ${record.getTask.getNum}}" th:if="${record.getStatus().getMessage == 'TASK_IN_WORK'}">
+    <a th:href="@{'/' + ${role} + '/solution/upload/' + ${record.getId} + '/' + ${record.getTaskNum}}"
+       th:if="${record.getStatus().getMessage == 'TASK_IN_WORK' && role == 'student'}">
         <button>Загрузить решение</button>
     </a>
-    <a th:href="@{'/solution/reupload/' + ${record.getId} + '/' + ${record.getTask.getNum}}" th:if="${record.getStatus().getMessage == 'UPLOADED'}">
+    <a th:href="@{'/' + ${role} + '/solution/reupload/' + ${record.getId} + '/' + ${record.getTaskNum}}"
+       th:if="${record.getStatus().getMessage == 'UPLOADED' && role == 'student'}">
         <button>Изменить решение</button>
     </a>
-    <a th:href="@{'/solution/review/' + ${record.getId}}" th:if="${record.getStatus().getMessage == 'UPLOADED'}">
+    <a th:href="@{'/' + ${role} + '/solution/review/' + ${record.getId}}"
+       th:if="${record.getStatus().getMessage == 'UPLOADED' && role == 'teacher'}">
         <button>Принять решение на проверку</button>
     </a>
-    <a th:href="@{'/solution/verify/' + ${record.getId} + '/' + ${record.getTask.getNum}}" th:if="${record.getStatus().getMessage == 'IN_REVIEW'}">
+    <a th:href="@{'/' + ${role} + '/solution/verify/' + ${record.getId} + '/' + ${record.getTaskNum}}"
+       th:if="${record.getStatus().getMessage == 'IN_REVIEW' && role == 'teacher'}">
         <button>Оценить</button>
     </a>
     <br>
 </div>
 <div class="solutionView">
+    <div th:if="${role == 'teacher' || role == 'admin'}">
+        Студент: <span th:text="${record.getStudentName()}"/>
+    </div>
     <div>
         Статус: <span th:text="${record.getStatus().getMessage()}"/>
     </div>
@@ -34,7 +41,7 @@
     </div>
     <br>
     <div>
-        Задание: <span th:text="${record.getTask().getText()}"/>
+        Задание: <span th:text="${record.getTaskText()}"/>
     </div>
     <br>
     <div th:if="${record.getText() != null && !record.getText().isEmpty()}">
