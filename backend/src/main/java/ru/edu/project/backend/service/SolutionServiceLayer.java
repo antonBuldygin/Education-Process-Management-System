@@ -232,7 +232,12 @@ public class SolutionServiceLayer implements SolutionService {
      */
     @Override
     public List<SolutionInfo> getSolutionsByTask(final long taskId) {
-        return daLayer.getSolutionsByTask(taskId);
+        List<SolutionInfo> solutionsByTask = daLayer.getSolutionsByTask(taskId);
+
+        for (SolutionInfo solution: solutionsByTask) {
+            setExtraInfo(solution);
+        }
+        return solutionsByTask;
     }
 
     /**

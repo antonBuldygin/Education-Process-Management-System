@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 import org.springframework.web.servlet.ModelAndView;
+import ru.edu.project.backend.api.groups.GroupsService;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
 import ru.edu.project.backend.api.solutions.SolutionService;
 import ru.edu.project.backend.api.tasks.TaskForm;
@@ -33,9 +34,24 @@ public class TaskController {
     public static final String TASKS_ATTR = "tasks";
 
     /**
+     * Model's attribute for storing groups.
+     */
+    public static final String GROUPS_ATTR = "groups";
+
+    /**
+     * Model's attribute for storing group id.
+     */
+    public static final String GROUP_ID_ATTR = "groupId";
+
+    /**
      * Model's attribute for storing role.
      */
     public static final String ROLE = "role";
+
+    /**
+     * Model's attribute for storing task record.
+     */
+    public static final String RECORD = "record";
 
     /**
      * Task service.
@@ -48,6 +64,12 @@ public class TaskController {
      */
     @Autowired
     private SolutionService solutionService;
+
+    /**
+     * Group service.
+     */
+    @Autowired
+    private GroupsService groupService;
 
     /**
      * Displaying tasks for group.
@@ -65,7 +87,7 @@ public class TaskController {
         );
 
         model.addAttribute(
-                "groupId",
+                GROUP_ID_ATTR,
                 groupId
         );
 
@@ -98,7 +120,7 @@ public class TaskController {
         TaskInfo taskInfo = taskService.getById(taskId);
 
         model.addObject(
-                "record",
+                RECORD,
                 taskInfo
         );
 
@@ -113,7 +135,6 @@ public class TaskController {
     /**
      * View deleting task by id.
      *
-     * @param groupId
      * @param model
      * @param taskId
      * @param role
@@ -121,7 +142,6 @@ public class TaskController {
      */
     public String delete(final Model model,
                          final Long taskId,
-                         final Long groupId,
                          final String role
     ) {
 
@@ -134,10 +154,6 @@ public class TaskController {
 
         if (solutionsByTask != null) {
             model.addAttribute(
-                    "groupId",
-                    groupId
-            );
-            model.addAttribute(
                     SOLUTIONS_ATTR,
                     solutionsByTask
             );
@@ -146,7 +162,7 @@ public class TaskController {
 
         int deletedInfo = taskService.deleteById(taskId);
 
-        return "redirect:/" + role + "/task/" + groupId;
+        return "redirect:/" + role + "/task/all";
     }
 
 
@@ -154,24 +170,22 @@ public class TaskController {
     /**
      * View for creating new task for group.
      *
-     * @param groupId
-     * @param model
      * @param role
      * @return view
      */
-    public String createForm(final Model model,
-                             final Long groupId,
-                             final String role
-    ) {
+    public ModelAndView createForm(final String role) {
 
-        model.addAttribute(
+        ModelAndView model = new ModelAndView("task/create");
+
+        model.addObject(
                 ROLE,
                 role
         );
 
-        model.addAttribute("groupId",
-                groupId);
-        return "task/create";
+        model.addObject(GROUPS_ATTR,
+                groupService.getAllGroupsInfo());
+
+        return model;
     }
 
 
@@ -179,7 +193,6 @@ public class TaskController {
      * Processing of creation form.
      *
      * @param form
-     * @param groupId
      * @param bindingResult
      * @param model
      * @param role
@@ -187,7 +200,6 @@ public class TaskController {
      */
     public String createFormProcessing(
             final TaskCreateForm form,
-            final Long groupId,
             final BindingResult bindingResult,
             final Model model,
             final String role
@@ -199,7 +211,7 @@ public class TaskController {
                     bindingResult.getAllErrors()
             );
 
-            return createForm(model, groupId, role);
+            return createForm(role).getViewName();
         }
 
         model.addAttribute(
@@ -208,7 +220,7 @@ public class TaskController {
         );
 
         TaskInfo taskInfo = taskService.createTask(TaskForm.builder()
-                        .groupId(groupId)
+                        .groupId(form.getGroupId())
                         .num(form.getNum())
                         .title(form.getTitle())
                         .text(form.getText())
@@ -216,7 +228,7 @@ public class TaskController {
                         .endDate(form.getEndDate())
                         .build());
 
-        return "redirect:/" + role + "/task/" + groupId + "/?created=" + taskInfo.getId();
+        return "redirect:/" + role + "/task/all/?created=" + taskInfo.getId();
     }
 
 
@@ -239,9 +251,12 @@ public class TaskController {
         );
 
         model.addObject(
-                "record",
+                RECORD,
                 taskInfo
         );
+
+        model.addObject(GROUPS_ATTR,
+                groupService.getAllGroupsInfo());
 
         return model;
     }
@@ -270,7 +285,7 @@ public class TaskController {
                     bindingResult.getAllErrors()
             );
 
-            return createForm(model, taskId, role);
+            return createForm(role).getViewName();
         }
 
         model.addAttribute(
@@ -288,7 +303,7 @@ public class TaskController {
                         .endDate(form.getEndDate())
                         .build());
 
-        return "redirect:/" + role + "/task/edit/" + taskInfo.getId();
+        return "redirect:/" + role + "/task/view/" + taskInfo.getId();
     }
 
 

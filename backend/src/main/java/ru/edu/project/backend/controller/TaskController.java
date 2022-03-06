@@ -81,6 +81,7 @@ public class TaskController implements TaskService {
      * @return list of tasks
      */
     @Override
+    @GetMapping("/getAllTasks")
     public List<TaskInfo> getAllTasks() {
         return delegate.getAllTasks();
     }

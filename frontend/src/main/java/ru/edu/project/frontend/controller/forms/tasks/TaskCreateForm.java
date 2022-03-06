@@ -28,6 +28,7 @@ public class TaskCreateForm {
     /**
      * GroupId.
      */
+    @NotNull
     private Long groupId;
 
     /**

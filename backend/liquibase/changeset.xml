@@ -11,5 +11,5 @@
     <include file="./liquibase/changeSetPerService/group.xml"/>
     <include file="./liquibase/changeSetPerService/task.xml"/>
     <include file="./liquibase/changeSetPerService/solution.xml"/>
-
+    <include file="./liquibase/changeSetPerService/users.xml"/>
 </databaseChangeLog>

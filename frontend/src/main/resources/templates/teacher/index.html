@@ -7,9 +7,14 @@
 <body>
 <h1>Личный кабинет</h1>
 <div>
-    <a href="/teacher/task/"><button>Список заданий</button></a>
+    <a href="/teacher/groups/"><button>Список групп</button></a>
+
+    <a th:href="@{/teacher/task/{id}(id='all')}"><button>Список заданий</button></a>
 
     <a href="/teacher/solution/"><button>Решения задач</button></a>
+</div>
+<div class="logout">
+    <a href="/logout">Выйти</a>
 </div>
 </body>
 </html>

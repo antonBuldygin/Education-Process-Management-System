@@ -163,14 +163,14 @@ public class SolutionController {
      */
     public String createForm(final Model model, final String role) {
         long studentId = 1; //todo в дальнейшим заменим на id пользователя
-        long groupId = 1; //todo добавить получение группы по студенту
 
         model.addAttribute(
                 ROLE,
                 role
         );
 
-        model.addAttribute(TASKS_ATTR, taskService.getTasksByGroup(1)); //todo taskService.getAvailable(groupId));
+        model.addAttribute(TASKS_ATTR,
+                taskService.getTasksByGroup(1)); //todo taskService.getAvailable(groupId));
 
         return "solution/create";
     }

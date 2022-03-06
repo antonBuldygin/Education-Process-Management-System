@@ -24,6 +24,7 @@ public class StudentServiceLayer implements StudentService {
                 .firstName("Иван")
                 .secondName("Иванов")
                 .middleName("Иванович")
+                .groupId(1L)
                 .build();
     }
 }

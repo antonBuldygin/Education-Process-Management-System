@@ -65,7 +65,7 @@
         <thead>
         <th>Номер задания</th>
         <th>Заголовок задания</th>
-        <th>Студент</th>
+        <th th:if="${role != 'student'}">Студент</th>
         <th>Дата создания</th>
         <th>Статус</th>
         <th>Оценка</th>
@@ -75,7 +75,7 @@
         <tr class="solution" th:each="record : ${solutionsPage.getElements()}">
             <td th:text="${record.getTaskNum()}"/>
             <td th:text="${record.getTaskTitle()}"/>
-            <td th:text="${record.getStudentName()}"/>
+            <td th:text="${record.getStudentName()}" th:if="${role != 'student'}"/>
             <td th:text="${#dates.format(record.getCreationTime(), 'dd-MM-yyyy')}"/>
             <td th:text="${record.getStatus().getMessage()}"/>
             <td th:text="${record.getScore().getValue()}"/>
@@ -88,6 +88,9 @@
 </div>
 <div th:unless="${solutionsPage.getTotal() > 0}">
     Нет заданий в работе!
+</div>
+<div class="logout">
+    <a href="/logout">Выйти</a>
 </div>
 </body>
 </html>

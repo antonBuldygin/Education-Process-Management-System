@@ -48,7 +48,7 @@ public class SolutionController implements SolutionService {
     @Override
     @GetMapping("/getSolutionsByTask/{id}")
     public List<SolutionInfo> getSolutionsByTask(@PathVariable("id") final long taskId) {
-        return null;
+        return delegate.getSolutionsByTask(taskId);
     }
 
     /**

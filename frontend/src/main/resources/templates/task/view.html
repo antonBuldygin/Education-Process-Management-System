@@ -14,6 +14,10 @@
 <br>
 <div class="taskView">
     <div>
+        Группа: <span th:text="${record.getGroupId()}"/>
+    </div>
+    <br>
+    <div>
         Текст: <span th:text="${record.getText()}"/>
     </div>
     <br>
@@ -25,7 +29,7 @@
         Дата окончания: <span th:text="${#dates.format(record.getEndDate(), 'dd-MM-yyyy')}"/>
     </div>
     <br>
-    <div>
+    <div th:if="${role == 'teacher'}">
         <a th:href="@{'/' + ${role} + '/task/edit/' + ${record.getId}}">
             <button>Редактировать</button>
         </a>
@@ -33,6 +37,9 @@
             <button>Удалить</button>
         </a>
     </div>
+</div>
+<div class="logout">
+    <a href="/logout">Выйти</a>
 </div>
 </body>
 </html>
