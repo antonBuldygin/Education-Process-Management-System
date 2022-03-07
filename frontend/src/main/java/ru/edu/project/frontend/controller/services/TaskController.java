@@ -152,7 +152,7 @@ public class TaskController {
                 role
         );
 
-        if (solutionsByTask != null) {
+        if (solutionsByTask != null && solutionsByTask.size() > 0) {
             model.addAttribute(
                     SOLUTIONS_ATTR,
                     solutionsByTask

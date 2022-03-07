@@ -12,3 +12,7 @@ body {
 .selectedSolution {
   margin: 0 1em 0 0;
 }
+
+.logout {
+    margin-top: 50px;
+}

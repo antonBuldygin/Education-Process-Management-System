@@ -61,30 +61,32 @@
             </p>
         </form>
     </div>
-    <table class="solutionTable">
-        <thead>
-        <th>Номер задания</th>
-        <th>Заголовок задания</th>
-        <th th:if="${role != 'student'}">Студент</th>
-        <th>Дата создания</th>
-        <th>Статус</th>
-        <th>Оценка</th>
-        <th>Последнее обновление</th>
-        <th>Действия</th>
-        </thead>
-        <tr class="solution" th:each="record : ${solutionsPage.getElements()}">
-            <td th:text="${record.getTaskNum()}"/>
-            <td th:text="${record.getTaskTitle()}"/>
-            <td th:text="${record.getStudentName()}" th:if="${role != 'student'}"/>
-            <td th:text="${#dates.format(record.getCreationTime(), 'dd-MM-yyyy')}"/>
-            <td th:text="${record.getStatus().getMessage()}"/>
-            <td th:text="${record.getScore().getValue()}"/>
-            <td th:text="${#dates.format(record.getLastActionTime(), 'dd-MM-yyyy')}"/>
-            <td>
-                <a target="_blank" th:href="@{'/' + ${role} + '/solution/view/' + ${record.getId()}}">Просмотр</a>
-            </td>
-        </tr>
-    </table>
+    <div>
+        <table class="solutionTable">
+            <thead>
+            <th>Номер задания</th>
+            <th>Заголовок задания</th>
+            <th th:if="${role != 'student'}">Студент</th>
+            <th>Дата создания</th>
+            <th>Статус</th>
+            <th>Оценка</th>
+            <th>Последнее обновление</th>
+            <th>Действия</th>
+            </thead>
+            <tr class="solution" th:each="record : ${solutionsPage.getElements()}">
+                <td th:text="${record.getTaskNum()}"/>
+                <td th:text="${record.getTaskTitle()}"/>
+                <td th:text="${record.getStudentName()}" th:if="${role != 'student'}"/>
+                <td th:text="${#dates.format(record.getCreationTime(), 'dd-MM-yyyy')}"/>
+                <td th:text="${record.getStatus().getMessage()}"/>
+                <td th:text="${record.getScore().getValue()}"/>
+                <td th:text="${#dates.format(record.getLastActionTime(), 'dd-MM-yyyy')}"/>
+                <td>
+                    <a target="_blank" th:href="@{'/' + ${role} + '/solution/view/' + ${record.getId()}}">Просмотр</a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 <div th:unless="${solutionsPage.getTotal() > 0}">
     Нет заданий в работе!
