@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import ru.edu.project.backend.RestServiceInvocationHandler;
 import ru.edu.project.backend.api.solutions.SolutionService;
+import ru.edu.project.backend.api.students.StudentService;
 import ru.edu.project.backend.api.tasks.TaskService;
 
 import java.lang.reflect.Proxy;
@@ -38,6 +39,17 @@ public class RemoteServiceConfig {
         return getProxy(handler, TaskService.class);
     }
 
+    /**
+     * Rest-proxy for StudentService.
+     *
+     * @param handler
+     * @return rest-proxy
+     */
+    @Bean
+    public StudentService studentService(final RestServiceInvocationHandler handler) {
+        handler.setServiceUrl("/student");
+        return getProxy(handler, StudentService.class);
+    }
 
     private <T> T getProxy(final RestServiceInvocationHandler handler, final Class<T>... tClass) {
         return (T) Proxy.newProxyInstance(this.getClass().getClassLoader(), tClass, handler);
