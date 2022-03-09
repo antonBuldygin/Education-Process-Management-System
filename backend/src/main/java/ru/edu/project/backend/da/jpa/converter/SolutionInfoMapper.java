@@ -33,7 +33,12 @@ public interface SolutionInfoMapper {
      */
     List<SolutionInfo> mapList(List<SolutionEntity> listEntity);
 
-
+    /**
+     * Маппер List<SolutionEntity> -> List<SolutionInfo>.
+     * @param ids
+     * @return list job
+     */
+    List<SolutionInfo> map(Iterable<SolutionEntity> ids);
 
 
 }

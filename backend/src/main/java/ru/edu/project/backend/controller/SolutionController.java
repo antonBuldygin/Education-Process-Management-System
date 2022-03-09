@@ -11,7 +11,7 @@ import ru.edu.project.backend.api.common.PagedView;
 import ru.edu.project.backend.api.common.SolutionSearch;
 import ru.edu.project.backend.api.solutions.SolutionForm;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
-import ru.edu.project.backend.api.solutions.SolutionReviewForm;
+import ru.edu.project.backend.api.solutions.SolutionVerifyForm;
 import ru.edu.project.backend.api.solutions.SolutionService;
 import ru.edu.project.backend.service.SolutionServiceLayer;
 
@@ -26,6 +26,7 @@ public class SolutionController implements SolutionService {
      */
     @Autowired
     private SolutionServiceLayer delegate;
+
 
     /**
      * Getting student's solutions.
@@ -129,13 +130,13 @@ public class SolutionController implements SolutionService {
     /**
      * Solution is verified.
      *
-     * @param solutionReviewForm
+     * @param solutionVerifyForm
      * @return SolutionInfo
      */
     @Override
     @PostMapping("/verify")
-    public SolutionInfo verify(@RequestBody final SolutionReviewForm solutionReviewForm) {
-        return delegate.verify(solutionReviewForm);
+    public SolutionInfo verify(@RequestBody final SolutionVerifyForm solutionVerifyForm) {
+        return delegate.verify(solutionVerifyForm);
     }
 
 

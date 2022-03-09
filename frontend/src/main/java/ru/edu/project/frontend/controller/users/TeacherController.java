@@ -1,4 +1,4 @@
-package ru.edu.project.frontend.controller;
+package ru.edu.project.frontend.controller.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import ru.edu.project.frontend.controller.forms.solutions.SolutionVerifyForm;
+import ru.edu.project.frontend.controller.forms.solutions.SolutionVerifyingForm;
 import ru.edu.project.frontend.controller.forms.tasks.TaskCreateForm;
-import ru.edu.project.frontend.controller.services.GroupController;
-import ru.edu.project.frontend.controller.services.SolutionController;
-import ru.edu.project.frontend.controller.services.TaskController;
+import ru.edu.project.frontend.controller.services.Group;
+import ru.edu.project.frontend.controller.services.Solution;
+import ru.edu.project.frontend.controller.services.Student;
+import ru.edu.project.frontend.controller.services.Task;
 
 import javax.validation.Valid;
 
@@ -25,22 +26,28 @@ import javax.validation.Valid;
 public class TeacherController {
 
     /**
-     * Frontend solution controller.
+     * Frontend solution service.
      */
     @Autowired
-    private SolutionController solution;
+    private Solution solution;
 
     /**
-     * Frontend task controller.
+     * Frontend task service.
      */
     @Autowired
-    private TaskController task;
+    private Task task;
 
     /**
-     * Frontend group controller.
+     * Frontend group service.
      */
     @Autowired
-    private GroupController group;
+    private Group group;
+
+    /**
+     * Frontend student service.
+     */
+    @Autowired
+    private Student student;
 
     /**
      * List of sorting fields.
@@ -51,13 +58,12 @@ public class TeacherController {
      * Displaying teacher's index page.
      *
      * @param model
-     * @param auth
      * @return view
      */
     @GetMapping("/")
-    public String index(final Model model, final Authentication auth) {
+    public String index(final Model model) {
 
-        return "teacher/index";
+        return "users/teacher/index";
     }
 
     /**
@@ -67,7 +73,6 @@ public class TeacherController {
      * @param isAsc
      * @param page
      * @param perPage
-     * @param auth
      * @return modelAndView
      */
     @GetMapping("/solution")
@@ -75,10 +80,9 @@ public class TeacherController {
             @RequestParam(name = "searchBy", required = false, defaultValue = "") final String searchBy,
             @RequestParam(name = "direct", required = false, defaultValue = "1") final boolean isAsc,
             @RequestParam(name = "page", required = false, defaultValue = "1") final int page,
-            @RequestParam(name = "perPage", required = false, defaultValue = "10") final int perPage,
-            final Authentication auth
+            @RequestParam(name = "perPage", required = false, defaultValue = "10") final int perPage
     ) {
-        return solution.index(searchBy, isAsc, page, perPage, TEACHER_ROLE);
+        return solution.index(searchBy, isAsc, page, perPage, "all", TEACHER_ROLE);
     }
 
     /**
@@ -100,12 +104,11 @@ public class TeacherController {
      *
      * @param model
      * @param solutionId
-     * @param auth
      * @return view
      */
     @GetMapping("/solution/review/{solutionId}")
-    public String solutionReviewForm(final Model model, @PathVariable("solutionId") final Long solutionId,
-                                     final Authentication auth) {
+    public String solutionReviewForm(final Model model,
+                                     @PathVariable("solutionId") final Long solutionId) {
         return solution.reviewForm(model, solutionId, TEACHER_ROLE);
     }
 
@@ -114,13 +117,11 @@ public class TeacherController {
      *
      * @param solutionId
      * @param taskNum
-     * @param auth
      * @return view
      */
     @GetMapping("/solution/verify/{solutionId}/{taskNum}")
     public ModelAndView solutionVerifyForm(@PathVariable("solutionId") final Long solutionId,
-                                           @PathVariable("taskNum") final Integer taskNum,
-                                           final Authentication auth) {
+                                           @PathVariable("taskNum") final Integer taskNum) {
         return solution.verifyForm(solutionId, taskNum, TEACHER_ROLE);
     }
 
@@ -132,18 +133,16 @@ public class TeacherController {
      * @param taskNum
      * @param bindingResult
      * @param model
-     * @param auth
      * @return redirect url
      */
     @PostMapping("/solution/verify/{solutionId}/{taskNum}")
     public String solutionVerifyFormProcessing(
             @Valid
-            @ModelAttribute final SolutionVerifyForm form,
+            @ModelAttribute final SolutionVerifyingForm form,
             @PathVariable("solutionId") final Long solutionId,
             @PathVariable("taskNum") final Integer taskNum,
             final BindingResult bindingResult,
-            final Model model,
-            final Authentication auth
+            final Model model
     ) {
         return solution.verifyFormProcessing(form, solutionId, taskNum, bindingResult, model, TEACHER_ROLE);
     }
@@ -153,13 +152,11 @@ public class TeacherController {
      *
      * @param groupId
      * @param model
-     * @param auth
      * @return view
      */
     @GetMapping("/task/{groupId}")
     public String taskIndex(final Model model,
-                            @PathVariable("groupId") final String groupId,
-                            final Authentication auth) {
+                            @PathVariable("groupId") final String groupId) {
         return task.index(model, groupId, TEACHER_ROLE);
     }
 
@@ -167,11 +164,10 @@ public class TeacherController {
      * View task by id.
      *
      * @param taskId
-     * @param auth
      * @return modelAndView
      */
     @GetMapping("/task/view/{id}")
-    public ModelAndView taskView(@PathVariable("id") final Long taskId, final Authentication auth) {
+    public ModelAndView taskView(@PathVariable("id") final Long taskId) {
         return task.view(taskId, TEACHER_ROLE);
     }
 
@@ -193,11 +189,10 @@ public class TeacherController {
     /**
      * View for creating new task for group.
      *
-     * @param auth
      * @return ModelAndView
      */
     @GetMapping("/task/create")
-    public ModelAndView taskCreateForm(final Authentication auth) {
+    public ModelAndView taskCreateForm() {
         return task.createForm(TEACHER_ROLE);
     }
 
@@ -207,7 +202,6 @@ public class TeacherController {
      * @param form
      * @param bindingResult
      * @param model
-     * @param auth
      * @return redirect url
      */
     @PostMapping("/task/create")
@@ -215,8 +209,7 @@ public class TeacherController {
             @Valid
             @ModelAttribute final TaskCreateForm form,
             final BindingResult bindingResult,
-            final Model model,
-            final Authentication auth
+            final Model model
     ) {
         return task.createFormProcessing(form, bindingResult, model, TEACHER_ROLE);
     }
@@ -225,12 +218,10 @@ public class TeacherController {
      * View for editing new task.
      *
      * @param taskId
-     * @param auth
      * @return view
      */
     @GetMapping("/task/edit/{taskId}")
-    public ModelAndView taskEditForm(@PathVariable("taskId") final Long taskId,
-                                     final Authentication auth) {
+    public ModelAndView taskEditForm(@PathVariable("taskId") final Long taskId) {
         return task.editForm(taskId, TEACHER_ROLE);
     }
 
@@ -241,7 +232,6 @@ public class TeacherController {
      * @param form
      * @param bindingResult
      * @param model
-     * @param auth
      * @return redirect url
      */
     @PostMapping("/task/edit/{taskId}")
@@ -250,8 +240,7 @@ public class TeacherController {
             @ModelAttribute final TaskCreateForm form,
             @PathVariable("taskId") final Long taskId,
             final BindingResult bindingResult,
-            final Model model,
-            final Authentication auth
+            final Model model
     ) {
         return task.editFormProcessing(form, taskId, bindingResult, model, TEACHER_ROLE);
     }
@@ -260,13 +249,33 @@ public class TeacherController {
      * Displaying group's index page.
      *
      * @param model
-     * @param auth
      * @return view
      */
     @GetMapping("/group/")
-    public String groupIndex(final Model model,
-                             final Authentication auth) {
+    public String groupIndex(final Model model) {
         return group.index(model);
+    }
+
+    /**
+     * Displaying all student's info.
+     *
+     * @param model
+     * @return view
+     */
+    @GetMapping("/person/all")
+    public String personIndex(final Model model) {
+        return student.index(model, TEACHER_ROLE);
+    }
+
+    /**
+     * View student by id.
+     *
+     * @param studentId
+     * @return modelAndView
+     */
+    @GetMapping("/person/view/{id}")
+    public ModelAndView personView(@PathVariable("id") final Long studentId) {
+        return student.view(studentId, TEACHER_ROLE);
     }
 
 }

@@ -17,7 +17,7 @@ import ru.edu.project.frontend.controller.forms.tasks.TaskCreateForm;
 import java.util.List;
 
 @Component
-public class TaskController {
+public class Task {
     /**
      * Model's attribute for storing errors.
      */
@@ -147,11 +147,6 @@ public class TaskController {
 
         List<SolutionInfo> solutionsByTask = solutionService.getSolutionsByTask(taskId);
 
-        model.addAttribute(
-                ROLE,
-                role
-        );
-
         if (solutionsByTask != null && solutionsByTask.size() > 0) {
             model.addAttribute(
                     SOLUTIONS_ATTR,
@@ -159,6 +154,11 @@ public class TaskController {
             );
             return "task/deleteError";
         }
+
+        model.addAttribute(
+                ROLE,
+                role
+        );
 
         int deletedInfo = taskService.deleteById(taskId);
 
@@ -305,6 +305,5 @@ public class TaskController {
 
         return "redirect:/" + role + "/task/view/" + taskInfo.getId();
     }
-
 
 }

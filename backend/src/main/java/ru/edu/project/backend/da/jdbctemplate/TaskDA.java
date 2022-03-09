@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ru.edu.project.backend.da.jdbctemplate.Common.getInteger;
-
 /**
  * Data Access layer for task table.
  */
@@ -83,7 +81,7 @@ public class TaskDA implements TaskDALayer {
     private TaskInfo mapRow(final ResultSet resultSet) throws SQLException {
         return TaskInfo.builder()
                 .id(resultSet.getLong("id"))
-                .num(getInteger(resultSet, "num"))
+                .num(resultSet.getInt("num"))
                 .groupId(resultSet.getLong("group_id"))
                 .title(resultSet.getString("title"))
                 .text(resultSet.getString("text"))

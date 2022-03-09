@@ -7,9 +7,11 @@
 <body>
 <h1>Личный кабинет</h1>
 <div>
+    <a href="/admin/person/all"><button>Список студентов</button></a>
+
     <a href="/admin/groups/"><button>Список групп</button></a>
 
-    <a href="/admin/task/"><button>Список заданий</button></a>
+    <a th:href="@{/admin/task/{id}(id='all')}"><button>Список заданий</button></a>
 
     <a href="/admin/solution/"><button>Решения задач</button></a>
 </div>

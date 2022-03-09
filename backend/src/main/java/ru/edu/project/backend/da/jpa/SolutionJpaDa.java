@@ -73,8 +73,12 @@ public class SolutionJpaDa implements SolutionDALayer {
 
         PageRequest pageRequest = PageRequest.of(recordSearch.getPage(), recordSearch.getPerPage(), Sort.by(direction, recordSearch.getOrderBy()));
 
-        Page<SolutionEntity> page = repo.findByStudentId(recordSearch.getStudentId(), pageRequest);
-
+        Page<SolutionEntity> page;
+        if (recordSearch.getStudentId() == null) {
+            page = repo.findAll(pageRequest);
+        } else {
+            page = repo.findByStudentId(recordSearch.getStudentId(), pageRequest);
+        }
         return PagedView.<SolutionInfo>builder()
                 .elements(mapper.mapList(page.get().collect(Collectors.toList())))
                 .page(recordSearch.getPage())
@@ -176,5 +180,15 @@ public class SolutionJpaDa implements SolutionDALayer {
 
         SolutionActionEntity saved = linkRepo.save(entity);
 
+    }
+
+    /**
+     * Getting all solutions.
+     *
+     * @return list of solutions
+     */
+    @Override
+    public List<SolutionInfo> getAllSolutions() {
+        return mapper.map(repo.findAll());
     }
 }

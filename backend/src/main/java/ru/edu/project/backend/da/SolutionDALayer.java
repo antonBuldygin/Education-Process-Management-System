@@ -19,7 +19,7 @@ public interface SolutionDALayer {
     List<SolutionInfo> getSolutionsByStudent(long studentId);
 
     /**
-     * Searching for solutions.
+     * Searching for solutions .
      *
      * @param recordSearch
      * @return list
@@ -78,6 +78,10 @@ public interface SolutionDALayer {
      */
     void updateAction(SolutionInfo solutionInfo, String comment);
 
-
-
+    /**
+     * Getting all solutions.
+     *
+     * @return list of solutions
+     */
+    List<SolutionInfo> getAllSolutions();
 }

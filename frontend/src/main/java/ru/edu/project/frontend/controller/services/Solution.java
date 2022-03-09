@@ -12,18 +12,20 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.edu.project.backend.api.common.SolutionSearch;
 import ru.edu.project.backend.api.solutions.SolutionForm;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
-import ru.edu.project.backend.api.solutions.SolutionReviewForm;
-import ru.edu.project.backend.api.solutions.SolutionService;
+import ru.edu.project.backend.api.solutions.SolutionVerifyForm;
+import ru.edu.project.backend.api.students.StudentInfo;
+import ru.edu.project.backend.api.students.StudentService;
 import ru.edu.project.backend.api.tasks.TaskService;
 import ru.edu.project.frontend.controller.forms.solutions.SolutionCreateForm;
 import ru.edu.project.frontend.controller.forms.solutions.SolutionUploadForm;
-import ru.edu.project.frontend.controller.forms.solutions.SolutionVerifyForm;
+import ru.edu.project.frontend.controller.forms.solutions.SolutionVerifyingForm;
+
 
 import java.util.Arrays;
 import java.util.Optional;
 
 @Component
-public class SolutionController {
+public class Solution {
 
     /**
      * List of sorting fields.
@@ -69,7 +71,7 @@ public class SolutionController {
      * Solution service.
      */
     @Autowired
-    private SolutionService solutionService;
+    private ru.edu.project.backend.api.solutions.SolutionService solutionService;
 
     /**
      * Task service.
@@ -77,6 +79,11 @@ public class SolutionController {
     @Autowired
     private TaskService taskService;
 
+    /**
+     * Task service.
+     */
+    @Autowired
+    private StudentService studentService;
 
     /**
      * Displaying student's solutions.
@@ -86,16 +93,16 @@ public class SolutionController {
      * @param page
      * @param perPage
      * @param role
+     * @param studentId
      * @return modelAndView
      */
     public ModelAndView index(final String searchBy,
                               final boolean isAsc,
                               final int page,
                               final int perPage,
+                              final String studentId,
                               final String role
     ) {
-
-        long studentId = 1; //todo в дальнейшим заменим на id пользователя
 
         ModelAndView model = new ModelAndView("solution/index");
         SearchFields searchByField = SearchFields.byString(searchBy);
@@ -105,10 +112,30 @@ public class SolutionController {
                 role
         );
 
-        model.addObject(
-                SOLUTIONS_ATTR,
-                solutionService.searchSolutions(SolutionSearch.by(studentId, searchByField.getField(), isAsc, page - 1, perPage))
-        );
+        if ("all".equals(studentId)) {
+            model.addObject(
+                    SOLUTIONS_ATTR,
+                    solutionService.searchSolutions(
+                            SolutionSearch.by(null,
+                                    searchByField.getField(),
+                                    isAsc,
+                                    page - 1,
+                                    perPage)
+                    )
+            );
+        } else {
+            model.addObject(
+                    SOLUTIONS_ATTR,
+                    solutionService.searchSolutions(
+                            SolutionSearch.by(
+                                    Long.valueOf(studentId),
+                                    searchByField.getField(),
+                                    isAsc,
+                                    page - 1,
+                                    perPage)
+                    )
+            );
+        }
 
         model.addObject(ORDER_FIELDS, SearchFields.values());
         model.addObject(ORDER_BY_FIELD, searchByField);
@@ -127,7 +154,6 @@ public class SolutionController {
      * @return modelAndView
      */
     public ModelAndView view(final Long solutionId, final String role) {
-        long studentId = 1; //todo student id
 
         ModelAndView model = new ModelAndView("solution/view");
 
@@ -159,10 +185,14 @@ public class SolutionController {
      *
      * @param model
      * @param role
+     * @param studentId
      * @return view
      */
-    public String createForm(final Model model, final String role) {
-        long studentId = 1; //todo в дальнейшим заменим на id пользователя
+    public String createForm(final Model model,
+                             final Long studentId,
+                             final String role) {
+
+        StudentInfo studentInfo = studentService.getById(studentId);
 
         model.addAttribute(
                 ROLE,
@@ -170,7 +200,7 @@ public class SolutionController {
         );
 
         model.addAttribute(TASKS_ATTR,
-                taskService.getTasksByGroup(1)); //todo taskService.getAvailable(groupId));
+                taskService.getTasksByGroup(studentInfo.getGroupId())); //todo taskService.getAvailable(groupId));
 
         return "solution/create";
     }
@@ -183,12 +213,14 @@ public class SolutionController {
      * @param bindingResult
      * @param model
      * @param role
+     * @param studentId
      * @return redirect url
      */
     public String createFormProcessing(
             final SolutionCreateForm form,
             final BindingResult bindingResult,
             final Model model,
+            final Long studentId,
             final String role
     ) {
         if (bindingResult.hasErrors()) {
@@ -197,10 +229,8 @@ public class SolutionController {
                     bindingResult.getAllErrors()
             );
 
-            return createForm(model, role);
+            return createForm(model, studentId, role);
         }
-
-        final long studentId = 1; //todo student id
 
         model.addAttribute(
                 ROLE,
@@ -211,6 +241,81 @@ public class SolutionController {
 
         return "redirect:/" + role + "/solution/?created=" + solution.getId();
     }
+
+    /**
+     * View for uploading solution.
+     *
+     * @param solutionId
+     * @param taskNum
+     * @param role
+     * @return view
+     */
+    public ModelAndView uploadForm(final Long solutionId,
+                                   final Integer taskNum,
+                                   final String role
+    ) {
+
+        ModelAndView model = new ModelAndView("solution/upload");
+
+        model.addObject(
+                ROLE,
+                role
+        );
+
+        model.addObject(
+                "taskNum",
+                taskNum
+        );
+
+        return model;
+    }
+
+
+    /**
+     * Processing of uploading form.
+     *
+     * @param form
+     * @param solutionId
+     * @param taskNum
+     * @param bindingResult
+     * @param model
+     * @param role
+     * @param studentId
+     * @return redirect url
+     */
+    public String uploadFormProcessing(
+            final SolutionUploadForm form,
+            final Long solutionId,
+            final Integer taskNum,
+            final BindingResult bindingResult,
+            final Model model,
+            final Long studentId,
+            final String role
+    ) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute(
+                    FORM_ERROR_ATTR,
+                    bindingResult.getAllErrors()
+            );
+
+            return uploadForm(solutionId, taskNum, role).getViewName();
+        }
+
+        model.addAttribute(
+                ROLE,
+                role
+        );
+
+        SolutionInfo solution = solutionService.uploadSolution(SolutionForm.builder()
+                .solutionId(solutionId)
+                .studentId(studentId)
+                .text(form.getText())
+                .comment(form.getComment())
+                .build());
+
+        return "redirect:/" + role + "/solution/view/" + solution.getId();
+    }
+
 
     /**
      * View for reuploading solution.
@@ -254,6 +359,7 @@ public class SolutionController {
      * @param taskNum
      * @param bindingResult
      * @param model
+     * @param studentId
      * @param role
      * @return redirect url
      */
@@ -263,89 +369,12 @@ public class SolutionController {
             final Integer taskNum,
             final BindingResult bindingResult,
             final Model model,
+            final Long studentId,
             final String role
     ) {
-        model.addAttribute(
-                ROLE,
-                role
-        );
-
-        return uploadFormProcessing(form, solutionId, taskNum, bindingResult, model, role);
+        return uploadFormProcessing(form, solutionId, taskNum, bindingResult, model, studentId, role);
     }
 
-    /**
-     * View for uploading solution.
-     *
-     * @param solutionId
-     * @param taskNum
-     * @param role
-     * @return view
-     */
-    public ModelAndView uploadForm(final Long solutionId,
-                                   final Integer taskNum,
-                                   final String role
-    ) {
-
-        ModelAndView model = new ModelAndView("solution/upload");
-
-        model.addObject(
-                ROLE,
-                role
-        );
-
-        model.addObject(
-                "taskNum",
-                taskNum
-        );
-
-        return model;
-    }
-
-
-    /**
-     * Processing of uploading form.
-     *
-     * @param form
-     * @param solutionId
-     * @param taskNum
-     * @param bindingResult
-     * @param model
-     * @param role
-     * @return redirect url
-     */
-    public String uploadFormProcessing(
-            final SolutionUploadForm form,
-            final Long solutionId,
-            final Integer taskNum,
-            final BindingResult bindingResult,
-            final Model model,
-            final String role
-    ) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute(
-                    FORM_ERROR_ATTR,
-                    bindingResult.getAllErrors()
-            );
-
-            return uploadForm(solutionId, taskNum, role).getViewName();
-        }
-
-        final long studentId = 1; //todo student id
-
-        model.addAttribute(
-                ROLE,
-                role
-        );
-
-        SolutionInfo solution = solutionService.uploadSolution(SolutionForm.builder()
-                .solutionId(solutionId)
-                .studentId(studentId)
-                .text(form.getText())
-                .comment(form.getComment())
-                .build());
-
-        return "redirect:/" + role + "/solution/view/" + solution.getId();
-    }
 
     /**
      * View for taking solution for review.
@@ -408,7 +437,7 @@ public class SolutionController {
      * @return redirect url
      */
     public String verifyFormProcessing(
-            final SolutionVerifyForm form,
+            final SolutionVerifyingForm form,
             final Long solutionId,
             final Integer taskNum,
             final BindingResult bindingResult,
@@ -424,16 +453,13 @@ public class SolutionController {
             return verifyForm(solutionId, taskNum, role).getViewName();
         }
 
-        final long studentId = 1; //todo student id
-
         model.addAttribute(
                 ROLE,
                 role
         );
 
-        SolutionInfo solution = solutionService.verify(SolutionReviewForm.builder()
+        SolutionInfo solution = solutionService.verify(SolutionVerifyForm.builder()
                 .solutionId(solutionId)
-                .studentId(studentId)
                 .score(form.getScore())
                 .comment(form.getComment())
                 .build());

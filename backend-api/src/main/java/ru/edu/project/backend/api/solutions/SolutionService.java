@@ -60,11 +60,11 @@ public interface SolutionService {
 
     /** Solution is verified.
      *
-     * @param solutionReviewForm
+     * @param solutionVerifyForm
      * @return SolutionInfo
      */
     @AcceptorArgument
-    SolutionInfo verify(SolutionReviewForm solutionReviewForm);
+    SolutionInfo verify(SolutionVerifyForm solutionVerifyForm);
 
     /**
      * Getting solutions by task id.

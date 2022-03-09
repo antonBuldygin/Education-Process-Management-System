@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Просмотр данных студента</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Просмотр данных студента</h1>
+<div>
+    <a th:href="@{'/' + ${role} + '/person/all'}"
+       th:if="${role == 'admin'}">
+    <button>Вернуться к списку студентов</button>
+    </a>
+</div>
+<br>
+<div class="studentView">
+    <div>
+        Имя: <span th:text="${record.getFirstName()}"/>
+    </div>
+    <br>
+    <div>
+        Фамилия: <span th:text="${record.getLastName()}"/>
+    </div>
+    <br>
+    <div>
+        Дата рождения: <span th:text="${#dates.format(record.getBirthday(), 'dd-MM-yyyy')}"/>
+    </div>
+    <br>
+    <div>
+        Email: <span th:text="${record.getEmail()}"/>
+    </div>
+    <br>
+    <div>
+        Телефон: <span th:text="${record.getPhone()}"/>
+    </div>
+    <br>
+    <div th:if="${role != 'admin'}">
+        <a th:href="@{'/' + ${role} + '/solution'}">
+            <button>Решения</button>
+        </a>
+        <a th:href="@{'/' + ${role} + '/task/' + ${record.getGroupId}}"><button>Список заданий</button></a>
+    </div>
+    <br>
+    <div th:if="${role == 'admin'}">
+        <a th:href="@{'/' + ${role} + '/person/edit/' + ${record.getId}}">
+            <button>Редактировать</button>
+        </a>
+        <a th:href="@{'/' + ${role} + '/person/delete/' + ${record.getId}}">
+            <button>Удалить</button>
+        </a>
+    </div>
+</div>
+</body>
+</html>

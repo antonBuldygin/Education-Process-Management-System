@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактирование данных студента</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Редактирование данных студента</h1>
+<div>
+    <a th:href="@{'/' + ${role} + '/person/all'}">
+        <button>Вернуться к списку студентов</button>
+    </a>
+</div>
+<form method="post">
+    <p th:if="${errorsList!= null}">
+        <p class="errorMessage" th:each="error: ${errorsList}" th:text="${error.getField()+' '+error.getDefaultMessage()}"></p>
+    </p>
+    <p>
+        Имя: <input type="text" name="firstName" th:value="${record.getFirstName()}">
+    </p>
+    <p>
+        Фамилия: <input type="text" name="lastName" th:value="${record.getLastName()}">
+    </p>
+    <p>
+        <label>Дата рождения</label>
+        <br>
+        <input name="birthday" type="date" th:value="${#dates.format(record.getBirthday(), 'yyyy-MM-dd')}"/>
+    </p>
+    <p>
+        Email: <input type="text" name="email" th:value="${record.getEmail()}">
+    </p>
+    <p>
+        Телефон: <input type="text" name="phone" th:value="${record.getPhone()}">
+    </p>
+    <p>
+        <input name="groupId" type="hidden" th:value="${record.getGroupId()}"/>
+    </p>
+    <p>
+        <button>Обновить данные</button>
+    </p>
+</form>
+
+<style>
+.errorMessage {
+    color: red;
+}
+</style>
+</body>
+</html>

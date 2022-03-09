@@ -211,6 +211,16 @@ public class SolutionDA implements SolutionDALayer {
         jdbcNamed.update(QUERY_FOR_UPDATE_LINK, linkToMap(solutionInfo, comment));
     }
 
+    /**
+     * Getting all solutions.
+     *
+     * @return list of solutions
+     */
+    @Override
+    public List<SolutionInfo> getAllSolutions() {
+        return null;
+    }
+
 
     private SolutionInfo update(final SolutionInfo draft) {
         jdbcNamed.update(QUERY_FOR_UPDATE, solutionToMap(draft));

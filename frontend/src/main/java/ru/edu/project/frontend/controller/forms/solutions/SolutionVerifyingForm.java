@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class SolutionVerifyForm {
+public class SolutionVerifyingForm {
     /**
      * Max score value.
      */

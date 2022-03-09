@@ -1,4 +1,4 @@
-package ru.edu.project.frontend.controller;
+package ru.edu.project.frontend.controller.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,8 +18,9 @@ import ru.edu.project.authorization.UserDetailsId;
 import ru.edu.project.backend.api.students.StudentService;
 import ru.edu.project.frontend.controller.forms.solutions.SolutionCreateForm;
 import ru.edu.project.frontend.controller.forms.solutions.SolutionUploadForm;
-import ru.edu.project.frontend.controller.services.SolutionController;
-import ru.edu.project.frontend.controller.services.TaskController;
+import ru.edu.project.frontend.controller.services.Solution;
+import ru.edu.project.frontend.controller.services.Task;
+import ru.edu.project.frontend.controller.services.Student;
 
 import javax.validation.Valid;
 
@@ -28,16 +29,22 @@ import javax.validation.Valid;
 public class StudentController {
 
     /**
-     * Frontend solution controller.
+     * Frontend solution service.
      */
     @Autowired
-    private SolutionController solution;
+    private Solution solution;
 
     /**
-     * Frontend task controller.
+     * Frontend task service.
      */
     @Autowired
-    private TaskController task;
+    private Task task;
+
+    /**
+     * Frontend student service.
+     */
+    @Autowired
+    private Student student;
 
     /**
      * Student service.
@@ -65,11 +72,16 @@ public class StudentController {
         long groupId = studentService.getById(studentId).getGroupId();
 
         model.addAttribute(
+                "studentId",
+                studentId
+        );
+
+        model.addAttribute(
                 "groupId",
                 groupId
         );
 
-        return "student/index";
+        return "users/student/index";
     }
 
     /**
@@ -90,7 +102,9 @@ public class StudentController {
             @RequestParam(name = "perPage", required = false, defaultValue = "10") final int perPage,
             final Authentication auth
     ) {
-        return solution.index(searchBy, isAsc, page, perPage, STUDENT_ROLE);
+        long studentId = getStudentId(auth);
+
+        return solution.index(searchBy, isAsc, page, perPage, String.valueOf(studentId), STUDENT_ROLE);
     }
 
     /**
@@ -110,11 +124,17 @@ public class StudentController {
      * View for creating new solution.
      *
      * @param model
+     * @param auth
      * @return view
      */
     @GetMapping("/solution/create")
-    public String solutionCreateForm(final Model model) {
-        return solution.createForm(model, STUDENT_ROLE);
+    public String solutionCreateForm(final Model model,
+                                     final Authentication auth
+    ) {
+
+        long studentId = getStudentId(auth);
+
+        return solution.createForm(model, studentId, STUDENT_ROLE);
     }
 
     /**
@@ -134,7 +154,10 @@ public class StudentController {
             final Model model,
             final Authentication auth
     ) {
-        return solution.createFormProcessing(form, bindingResult, model, STUDENT_ROLE);
+
+        long studentId = getStudentId(auth);
+
+        return solution.createFormProcessing(form, bindingResult, model, studentId, STUDENT_ROLE);
     }
 
     /**
@@ -164,7 +187,7 @@ public class StudentController {
      * @return redirect url
      */
     @PostMapping("/solution/reupload/{solutionId}/{taskNum}")
-    public String reuploadFormProcessing(
+    public String solutionReuploadFormProcessing(
             @Valid
             @ModelAttribute final SolutionUploadForm form,
             @PathVariable("solutionId") final Long solutionId,
@@ -173,7 +196,10 @@ public class StudentController {
             final Model model,
             final Authentication auth
     ) {
-        return reuploadFormProcessing(form, solutionId, taskNum, bindingResult, model, auth);
+
+        long studentId = getStudentId(auth);
+
+        return solution.reuploadFormProcessing(form, solutionId, taskNum, bindingResult, model, studentId, STUDENT_ROLE);
     }
 
     /**
@@ -185,7 +211,7 @@ public class StudentController {
      * @return view
      */
     @GetMapping("/solution/upload/{solutionId}/{taskNum}")
-    public ModelAndView uploadForm(@PathVariable("solutionId") final Long solutionId,
+    public ModelAndView solutionUploadForm(@PathVariable("solutionId") final Long solutionId,
                                    @PathVariable("taskNum") final Integer taskNum,
                                    final Authentication auth) {
 
@@ -205,7 +231,7 @@ public class StudentController {
      * @return redirect url
      */
     @PostMapping("/solution/upload/{solutionId}/{taskNum}")
-    public String uploadFormProcessing(
+    public String solutionUploadFormProcessing(
             @Valid
             @ModelAttribute final SolutionUploadForm form,
             @PathVariable("solutionId") final Long solutionId,
@@ -214,7 +240,9 @@ public class StudentController {
             final Model model,
             final Authentication auth
     ) {
-        return solution.uploadFormProcessing(form, solutionId, taskNum, bindingResult, model, STUDENT_ROLE);
+        long studentId = getStudentId(auth);
+
+        return solution.uploadFormProcessing(form, solutionId, taskNum, bindingResult, model, studentId, STUDENT_ROLE);
     }
 
     /**
@@ -244,6 +272,19 @@ public class StudentController {
                                  final Authentication auth) {
         return task.view(taskId, STUDENT_ROLE);
     }
+
+
+    /**
+     * View student by id.
+     *
+     * @param studentId
+     * @return modelAndView
+     */
+    @GetMapping("/person/view/{id}")
+    public ModelAndView personView(@PathVariable("id") final Long studentId) {
+        return student.view(studentId, STUDENT_ROLE);
+    }
+
 
 
     /**

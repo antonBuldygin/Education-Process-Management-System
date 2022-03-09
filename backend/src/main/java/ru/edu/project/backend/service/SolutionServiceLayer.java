@@ -9,7 +9,7 @@ import ru.edu.project.backend.api.common.Score;
 import ru.edu.project.backend.api.common.SolutionSearch;
 import ru.edu.project.backend.api.solutions.SolutionForm;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
-import ru.edu.project.backend.api.solutions.SolutionReviewForm;
+import ru.edu.project.backend.api.solutions.SolutionVerifyForm;
 import ru.edu.project.backend.api.solutions.SolutionService;
 import ru.edu.project.backend.api.students.StudentInfo;
 import ru.edu.project.backend.api.tasks.TaskInfo;
@@ -42,6 +42,7 @@ public class SolutionServiceLayer implements SolutionService {
      */
     @Autowired
     private StudentServiceLayer studentService;
+
 
     /**
      * Getting student's solutions.
@@ -194,15 +195,15 @@ public class SolutionServiceLayer implements SolutionService {
     /**
      * Solution is verified.
      *
-     * @param solutionReviewForm
+     * @param solutionVerifyForm
      * @return SolutionInfo
      */
     @Override
-    public SolutionInfo verify(final SolutionReviewForm solutionReviewForm) {
+    public SolutionInfo verify(final SolutionVerifyForm solutionVerifyForm) {
 
-        SolutionInfo solutionInfo = daLayer.getById(solutionReviewForm.getSolutionId());
+        SolutionInfo solutionInfo = daLayer.getById(solutionVerifyForm.getSolutionId());
 
-        if (solutionInfo == null || solutionInfo.getStudentId() != solutionReviewForm.getStudentId()) {
+        if (solutionInfo == null) {
             throw new IllegalArgumentException("No such solution!");
         }
 
@@ -210,14 +211,14 @@ public class SolutionServiceLayer implements SolutionService {
             throw new IllegalArgumentException("Can't verifying for solution not in status \"IN_REVIEW\"!");
         }
 
-        solutionInfo.setScore(new Score(solutionReviewForm.getScore()));
+        solutionInfo.setScore(new Score(solutionVerifyForm.getScore()));
         solutionInfo.setCheckedTime(new Timestamp(new Date().getTime()));
         solutionInfo.setStatus(SolutionStatus.CHECKED);
         solutionInfo.setLastActionTime(new Timestamp(new Date().getTime()));
 
         daLayer.save(solutionInfo);
 
-        daLayer.doAction(solutionInfo, solutionReviewForm.getComment());
+        daLayer.doAction(solutionInfo, solutionVerifyForm.getComment());
 
         setExtraInfo(solutionInfo);
 
@@ -268,8 +269,7 @@ public class SolutionServiceLayer implements SolutionService {
     private void setStudentName(final SolutionInfo solution) {
         StudentInfo student = studentService.getById(solution.getStudentId());
         solution.setStudentName(student.getFirstName() + " "
-                                + student.getMiddleName() + " "
-                                + student.getSecondName()
+                                + student.getLastName()
                                 );
     }
 

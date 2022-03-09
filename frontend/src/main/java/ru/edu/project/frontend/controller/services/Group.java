@@ -14,12 +14,9 @@ import ru.edu.project.backend.api.teachers.TeacherService;
 import ru.edu.project.frontend.controller.forms.groups.GroupsCreateForm;
 
 
-/**
- * Для отладки через spring-boot:run не забываем добавить флаг.
- * -Dspring-boot.run.fork=false
- */
+
 @Component
-public class GroupController {
+public class Group {
 
     /**
      * Атрибут модели для хранения списка ошибок.

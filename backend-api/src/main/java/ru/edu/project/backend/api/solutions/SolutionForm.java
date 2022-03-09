@@ -10,7 +10,7 @@ public class SolutionForm {
     /** Solution id.
      *
      */
-    private long solutionId;
+    private Long solutionId;
 
     /**
      * Student id.

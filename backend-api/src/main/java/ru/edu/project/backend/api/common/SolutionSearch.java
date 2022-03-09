@@ -22,7 +22,7 @@ public class SolutionSearch {
     /**
      * Student id.
      */
-    private long studentId;
+    private Long studentId;
 
     /**
      * Field sorting.
@@ -92,7 +92,7 @@ public class SolutionSearch {
      * @param perPage
      * @return obj
      */
-    public static SolutionSearch by(final long studentId, final String field, final boolean direction, final int page, final int perPage) {
+    public static SolutionSearch by(final Long studentId, final String field, final boolean direction, final int page, final int perPage) {
 
         return SolutionSearch.builder()
                 .studentId(studentId)
