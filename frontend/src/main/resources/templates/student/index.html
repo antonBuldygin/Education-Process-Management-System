@@ -1,14 +1,34 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Личный кабинет</title>
+    <title>Список студентов</title>
     <link th:href="@{/css/styles.css}" rel="stylesheet">
 </head>
 <body>
-<h1>Личный кабинет</h1>
+<h1>Список студентов</h1>
 <div>
-    <a href="/solution/"><button>Мои решения</button></a>
-    <a th:href="@{/task/{id}(id=${groupId})}"><button>Список заданий</button></a>
+    <a th:href="@{/student/create}">
+        <button>Добавить студента</button>
+    </a>
+</div>
+<div th:if="${students.size() > 0}">
+    <div class="student" th:each="record : ${students}">
+        <h2 th:text="${record.getFirstName() + ' ' + record.getLastName()}"></h2>
+        <div>
+            Дата рождения: <span th:text="${#dates.format(record.getBirthday(), 'dd-MM-yyyy')}"/>
+        </div>
+        <br>
+        <a th:href="@{/student/view/{id}(id=${record.getId()})}">
+            <button>Просмотр</button>
+        </a>
+        <a th:href="@{'/student/delete/' + ${record.getId}}">
+            <button>Удаление</button>
+        </a>
+    </div>
+</div>
+<div th:unless="${students.size() > 0}">
+    Список студентов пока пуст!
 </div>
 </body>
 </html>

@@ -2,6 +2,8 @@ package ru.edu.project.backend.da;
 
 import ru.edu.project.backend.api.students.StudentInfo;
 
+import java.util.List;
+
 
 public interface StudentDALayer {
 
@@ -15,7 +17,7 @@ public interface StudentDALayer {
     StudentInfo save(StudentInfo draft);
 
     /**
-     * Get task by id.
+     * Get student by id.
      *
      * @param id
      * @return список
@@ -23,10 +25,18 @@ public interface StudentDALayer {
     StudentInfo getById(long id);
 
     /**
-     * Delete task by id.
+     * Delete student by id.
      *
      * @param id
      * @return int
      */
     int deleteById(long id);
+
+    /**
+     * Getting all students.
+     *
+     * @return list of students
+     */
+    List<StudentInfo> getAllStudents();
 }
+

@@ -9,6 +9,8 @@ import ru.edu.project.backend.api.students.StudentInfo;
 import ru.edu.project.backend.api.students.StudentService;
 import ru.edu.project.backend.da.StudentDALayer;
 
+import java.util.List;
+
 @Service
 @Profile("!STUB")
 @Qualifier("StudentServiceLayer")
@@ -52,6 +54,7 @@ public class StudentServiceLayer implements StudentService {
     @Override
     public StudentInfo editStudent(final StudentForm studentForm) {
         StudentInfo draft = StudentInfo.builder()
+                .id(studentForm.getId())
                 .groupId(studentForm.getGroupId())
                 .firstName(studentForm.getFirstName())
                 .lastName(studentForm.getLastName())
@@ -86,4 +89,15 @@ public class StudentServiceLayer implements StudentService {
     public int deleteById(final long id) {
         return daLayer.deleteById(id);
     }
+
+    /**
+     * Getting all students.
+     *
+     * @return list of tasks
+     */
+    @Override
+    public List<StudentInfo> getAllStudents() {
+        return daLayer.getAllStudents();
+    }
 }
+

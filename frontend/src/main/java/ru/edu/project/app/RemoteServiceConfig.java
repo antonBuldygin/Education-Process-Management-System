@@ -39,6 +39,7 @@ public class RemoteServiceConfig {
         return getProxy(handler, TaskService.class);
     }
 
+
     /**
      * Rest-proxy for StudentService.
      *

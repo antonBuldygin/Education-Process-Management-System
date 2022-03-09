@@ -13,12 +13,12 @@ import java.sql.Timestamp;
 public class StudentForm {
 
     /**
-     * Task id.
+     * definition.
      */
     private Long id;
 
     /**
-     * Group id.
+     * definition.
      */
     private Long groupId;
 

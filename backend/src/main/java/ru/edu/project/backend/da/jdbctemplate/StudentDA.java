@@ -12,11 +12,9 @@ import ru.edu.project.backend.da.StudentDALayer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import static ru.edu.project.backend.da.jdbctemplate.Common.getInteger;
 
 /**
  * Data Access layer for student table.
@@ -24,6 +22,7 @@ import static ru.edu.project.backend.da.jdbctemplate.Common.getInteger;
 @Component
 @Profile("JDBC_TEMPLATE")
 public class StudentDA implements StudentDALayer {
+
 
     /**
      * Getting student by id.
@@ -33,10 +32,16 @@ public class StudentDA implements StudentDALayer {
     /**
      * Updating student.
      */
-    public static final String QUERY_FOR_UPDATE = "UPDATE task SET group_id = :group_id, first_name = :first_name, last_name = :last_name, email = :email, birthday = :birthday, phone = :phone  WHERE id = :id";
+    public static final String QUERY_FOR_UPDATE = "UPDATE student SET group_id = :group_id, first_name = :first_name, last_name = :last_name, email = :email, birthday = :birthday, phone = :phone  WHERE id = :id";
 
     /**
-     * Deleting task.
+     * Getting all students.
+     */
+    public static final String QUERY_ALL_STUDENTS = "SELECT * FROM student";
+
+
+    /**
+     * Deleting student.
      */
     public static final String QUERY_FOR_DELETE = "DELETE FROM student WHERE id = :id";
 
@@ -58,17 +63,36 @@ public class StudentDA implements StudentDALayer {
     @Autowired
     private NamedParameterJdbcTemplate jdbcNamed;
 
+    /**
+     * Embedding a jdbc insert dependency with a table setting.
+     *
+     * @param resultSet
+     * @param pos
+     * @return student
+     */
     @SneakyThrows
     private StudentInfo rowMapper(final ResultSet resultSet, final int pos) {
         return mapRow(resultSet);
     }
 
+    /**
+     * Embedding a jdbc insert dependency with a table setting.
+     *
+     * @param resultSet
+     * @return student
+     */
     @SneakyThrows
     private StudentInfo singleRowMapper(final ResultSet resultSet) {
         resultSet.next();
         return mapRow(resultSet);
     }
 
+    /**
+     * mapRow.
+     *
+     * @param resultSet
+     * @return student
+     */
     private StudentInfo mapRow(final ResultSet resultSet) throws SQLException {
         return StudentInfo.builder()
                 .id(resultSet.getLong("id"))
@@ -96,6 +120,12 @@ public class StudentDA implements StudentDALayer {
         return update(draft);
     }
 
+    /**
+     * update student.
+     *
+     * @param draft
+     * @return student
+     */
     private StudentInfo update(final StudentInfo draft) {
         jdbcNamed.update(QUERY_FOR_UPDATE, toMap(draft));
         return draft;
@@ -114,12 +144,24 @@ public class StudentDA implements StudentDALayer {
 
     }
 
+    /**
+     * Embedding a jdbc insert dependency with a table setting.
+     *
+     * @param draft
+     * @return student
+     */
     private StudentInfo insert(final StudentInfo draft) {
         long id = jdbcInsert.executeAndReturnKey(toMap(draft)).longValue();
         draft.setId(id);
         return draft;
     }
 
+    /**
+     * Embedding a jdbc insert dependency with a table setting.
+     *
+     * @param draft
+     * @return map
+     */
     private Map<String, Object> toMap(final StudentInfo draft) {
         HashMap<String, Object> map = new HashMap<>();
         if (draft.getId() != null) {
@@ -161,5 +203,15 @@ public class StudentDA implements StudentDALayer {
         map.put("id", id);
 
         return jdbcNamed.update(QUERY_FOR_DELETE, map);
+    }
+
+    /**
+     * Getting all students.
+     *
+     * @return list of students
+     */
+    @Override
+    public List<StudentInfo> getAllStudents() {
+        return jdbcTemplate.query(QUERY_ALL_STUDENTS, this::rowMapper);
     }
 }

@@ -1,7 +1,12 @@
 package ru.edu.project.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.edu.project.backend.api.students.StudentForm;
 import ru.edu.project.backend.api.students.StudentInfo;
 import ru.edu.project.backend.api.students.StudentService;
@@ -68,4 +73,16 @@ public class StudentController implements StudentService {
     public int deleteById(@PathVariable("id") final long id) {
         return delegate.deleteById(id);
     }
+
+    /**
+     * Getting all students.
+     *
+     * @return list of tasks
+     */
+    @Override
+    @GetMapping("/getAllStudents")
+    public List<StudentInfo> getAllStudents() {
+        return delegate.getAllStudents();
+    }
 }
+
