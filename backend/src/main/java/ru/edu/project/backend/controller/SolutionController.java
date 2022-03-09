@@ -11,8 +11,8 @@ import ru.edu.project.backend.api.common.PagedView;
 import ru.edu.project.backend.api.common.SolutionSearch;
 import ru.edu.project.backend.api.solutions.SolutionForm;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
-import ru.edu.project.backend.api.solutions.SolutionVerifyForm;
 import ru.edu.project.backend.api.solutions.SolutionService;
+import ru.edu.project.backend.api.solutions.SolutionVerifyForm;
 import ru.edu.project.backend.service.SolutionServiceLayer;
 
 import java.util.List;

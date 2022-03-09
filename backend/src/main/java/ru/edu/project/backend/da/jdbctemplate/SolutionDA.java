@@ -21,8 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ru.edu.project.backend.da.jdbctemplate.Common.getInteger;
-
 /**
  * Data Access layer for solution.
  */
@@ -104,7 +102,6 @@ public class SolutionDA implements SolutionDALayer {
                 .usingGeneratedKeyColumns("id");
 
     }
-
 
 
     /**
@@ -287,7 +284,7 @@ public class SolutionDA implements SolutionDALayer {
                 .creationTime(rs.getTimestamp("creation_time"))
                 .lastActionTime(rs.getTimestamp("last_action_time"))
                 .checkedTime(rs.getTimestamp("checked_time"))
-                .score(new Score(getInteger(rs, "score")))
+                .score(new Score(rs.getInt("score")))
                 .text(rs.getString("text"))
                 .build();
     }
