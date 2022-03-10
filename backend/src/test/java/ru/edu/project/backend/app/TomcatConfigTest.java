@@ -1,21 +1,25 @@
 package ru.edu.project.backend.app;
 
+import lombok.SneakyThrows;
 import org.junit.Test;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.jndi.JndiObjectFactoryBean;
+
+import javax.sql.DataSource;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public class TomcatConfigTest {
 
     TomcatConfig tomcatConfig = new TomcatConfig();
 
     @Test
+    @SneakyThrows
     public void jndiDataSource() {
         JndiObjectFactoryBean bean = mock(JndiObjectFactoryBean.class);
 
-        verify(bean).setJndiName("java:comp/env/jdbc/backendDbLink");
+        DataSource dataSource = tomcatConfig.jndiDataSource();
+
+        assertNotNull(dataSource);
     }
 }

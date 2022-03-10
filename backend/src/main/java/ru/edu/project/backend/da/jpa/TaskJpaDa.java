@@ -39,8 +39,7 @@ public class TaskJpaDa implements TaskDALayer {
      */
     @Override
     public List<TaskInfo> getAvailable(final Timestamp date, final long groupId) {
-        //return mapper.map(repo.getAvailable(date, groupId));
-        return null;
+        return mapper.map(repo.getAvailable(date, groupId));
     }
 
     /**

@@ -52,6 +52,7 @@ public class SolutionServiceLayer implements SolutionService {
      */
     @Override
     public List<SolutionInfo> getSolutionsByStudent(final long studentId) {
+
         List<SolutionInfo> solutionsList = daLayer.getSolutionsByStudent(studentId);
 
         for (SolutionInfo solution : solutionsList) {
@@ -134,13 +135,15 @@ public class SolutionServiceLayer implements SolutionService {
 
         SolutionInfo solutionInfo = daLayer.getById(solutionForm.getSolutionId());
 
-        if (solutionInfo == null || solutionInfo.getStudentId() != solutionForm.getStudentId()) {
-            throw new IllegalArgumentException("No such solution!");
+        if (solutionInfo.getStatus() != SolutionStatus.TASK_IN_WORK
+                && solutionInfo.getStatus() != SolutionStatus.UPLOADED) {
+            throw new IllegalArgumentException("Can't uploading for solution not in status \"TASK_IN_WORK\" or \"UPLOADED\"!");
         }
 
-        if (!(solutionInfo.getStatus() != SolutionStatus.TASK_IN_WORK
-                || solutionInfo.getStatus() != SolutionStatus.UPLOADED)) {
-            throw new IllegalArgumentException("Can't uploading for solution not in status \"TASK_IN_WORK\" or \"UPLOADED\"!");
+        if (solutionInfo.getStatus() == SolutionStatus.TASK_IN_WORK) {
+            daLayer.doAction(solutionInfo, solutionForm.getComment());
+        } else {
+            daLayer.updateAction(solutionInfo, solutionForm.getComment());
         }
 
         solutionInfo.setText(solutionForm.getText());
@@ -148,12 +151,6 @@ public class SolutionServiceLayer implements SolutionService {
         solutionInfo.setLastActionTime(new Timestamp(new Date().getTime()));
 
         daLayer.save(solutionInfo);
-
-        if (solutionInfo.getStatus() == SolutionStatus.TASK_IN_WORK) {
-            daLayer.doAction(solutionInfo, solutionForm.getComment());
-        } else {
-            daLayer.updateAction(solutionInfo, solutionForm.getComment());
-        }
 
         setExtraInfo(solutionInfo);
 
@@ -170,10 +167,6 @@ public class SolutionServiceLayer implements SolutionService {
     public SolutionInfo takeForReview(final long solutionId) {
 
         SolutionInfo solutionInfo = daLayer.getById(solutionId);
-
-        if (solutionInfo == null) {
-            throw new IllegalArgumentException("No such solution!");
-        }
 
         if (solutionInfo.getStatus() != SolutionStatus.UPLOADED) {
             throw new IllegalArgumentException("Can't taking for review for solution not in status \"UPLOADED\"!");
@@ -202,10 +195,6 @@ public class SolutionServiceLayer implements SolutionService {
     public SolutionInfo verify(final SolutionVerifyForm solutionVerifyForm) {
 
         SolutionInfo solutionInfo = daLayer.getById(solutionVerifyForm.getSolutionId());
-
-        if (solutionInfo == null) {
-            throw new IllegalArgumentException("No such solution!");
-        }
 
         if (solutionInfo.getStatus() != SolutionStatus.IN_REVIEW) {
             throw new IllegalArgumentException("Can't verifying for solution not in status \"IN_REVIEW\"!");

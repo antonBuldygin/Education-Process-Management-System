@@ -15,6 +15,7 @@ public class ServletInitializerTest {
     @Test
     public void configure() {
         openMocks(this);
+
         SpringApplicationBuilder application = mock(SpringApplicationBuilder.class);
 
         servletInitializer.configure(application);
