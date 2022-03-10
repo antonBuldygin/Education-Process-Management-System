@@ -35,13 +35,13 @@ public class TaskControllerTest {
 
     @Test
     public void getAvailable() {
-        List<TaskInfo> taskInfoList = new ArrayList<>();
+        List<TaskInfo> taskInfos = new ArrayList<>();
 
-        when(delegate.getAvailable(any())).thenReturn(taskInfoList);
+        when(delegate.getAvailable(GROUP_ID)).thenReturn(taskInfos);
 
         List<TaskInfo> result = taskController.getAvailable(GROUP_ID);
 
-        verify(delegate, times(1)).getAvailable(any());
+        verify(delegate, times(1)).getAvailable(GROUP_ID);
     }
 
     @Test

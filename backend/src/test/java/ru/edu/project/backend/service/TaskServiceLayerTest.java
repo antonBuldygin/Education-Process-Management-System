@@ -1,13 +1,11 @@
 package ru.edu.project.backend.service;
 
-import javafx.concurrent.Task;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import ru.edu.project.backend.api.tasks.TaskForm;
 import ru.edu.project.backend.api.tasks.TaskInfo;
-import ru.edu.project.backend.da.SolutionDALayer;
 import ru.edu.project.backend.da.TaskDALayer;
 
 import java.sql.Timestamp;
