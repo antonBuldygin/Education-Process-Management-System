@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавление студента</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Добавление студента</h1>
+<div>
+    <a th:href="@{'/student/'}">
+        <button>Вернуться к списку студентов</button>
+    </a>
+</div>
+<form method="post">
+    <p th:if="${errorsList!= null}">
+        <p class="errorMessage" th:each="error: ${errorsList}" th:text="${error.getField()+' '+error.getDefaultMessage()}"></p>
+    </p>
+    <p>
+        Имя: <input type="text" name="firstName">
+    </p>
+    <p>
+        Фамилия: <input type="text" name="lastName">
+    </p>
+    <p>
+        <label>Дата рождения</label>
+        <br/>
+        <input name="birthday" type="date"/>
+    </p>
+    <p>
+        Email: <input type="text" name="email">
+    </p>
+    <p>
+        Телефон: <input type="text" name="phone">
+    </p>
+    <p>
+        <button>Добавить студента</button>
+    </p>
+</form>
+
+<style>
+.errorMessage {
+    color: red;
+}
+</style>
+</body>
+</html>
