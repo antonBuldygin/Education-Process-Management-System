@@ -64,6 +64,18 @@ public class RemoteServiceConfig {
         return getProxy(handler, StudentService.class);
     }
 
+    /**
+     * Rest-proxy for StudentService.
+     *
+     * @param handler
+     * @return rest-proxy
+     */
+    @Bean
+    public StudentService studentService(final RestServiceInvocationHandler handler) {
+        handler.setServiceUrl("/student");
+        return getProxy(handler, StudentService.class);
+    }
+
     private <T> T getProxy(final RestServiceInvocationHandler handler, final Class<T>... tClass) {
         return (T) Proxy.newProxyInstance(this.getClass().getClassLoader(), tClass, handler);
     }
