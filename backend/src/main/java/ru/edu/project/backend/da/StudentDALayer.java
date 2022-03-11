@@ -17,7 +17,7 @@ public interface StudentDALayer {
     StudentInfo save(StudentInfo draft);
 
     /**
-     * Get task by id.
+     * Get student by id.
      *
      * @param id
      * @return список
@@ -25,7 +25,7 @@ public interface StudentDALayer {
     StudentInfo getById(long id);
 
     /**
-     * Delete task by id.
+     * Delete student by id.
      *
      * @param id
      * @return int
@@ -35,7 +35,8 @@ public interface StudentDALayer {
     /**
      * Getting all students.
      *
-     * @return list of tasks
+     * @return list of students
      */
     List<StudentInfo> getAllStudents();
 }
+

@@ -62,17 +62,38 @@ public class StudentDA implements StudentDALayer {
     @Autowired
     private NamedParameterJdbcTemplate jdbcNamed;
 
+    /**
+     * Embedding a jdbc insert dependency with a table setting.
+     *
+     * @param resultSet
+     * @param pos
+     * @return student
+     */
     @SneakyThrows
     private StudentInfo rowMapper(final ResultSet resultSet, final int pos) {
         return mapRow(resultSet);
     }
 
+
+    /**
+     * Embedding a jdbc insert dependency with a table setting.
+     *
+     * @param resultSet
+     * @return student
+     */
     @SneakyThrows
     private StudentInfo singleRowMapper(final ResultSet resultSet) {
         resultSet.next();
         return mapRow(resultSet);
     }
 
+
+    /**
+     * mapRow.
+     *
+     * @param resultSet
+     * @return student
+     */
     private StudentInfo mapRow(final ResultSet resultSet) throws SQLException {
         return StudentInfo.builder()
                 .id(resultSet.getLong("id"))
@@ -100,6 +121,12 @@ public class StudentDA implements StudentDALayer {
         return update(draft);
     }
 
+    /**
+     * update student.
+     *
+     * @param draft
+     * @return student
+     */
     private StudentInfo update(final StudentInfo draft) {
         jdbcNamed.update(QUERY_FOR_UPDATE, toMap(draft));
         return draft;
@@ -118,12 +145,26 @@ public class StudentDA implements StudentDALayer {
 
     }
 
+
+    /**
+     * Embedding a jdbc insert dependency with a table setting.
+     *
+     * @param draft
+     * @return student
+     */
     private StudentInfo insert(final StudentInfo draft) {
         long id = jdbcInsert.executeAndReturnKey(toMap(draft)).longValue();
         draft.setId(id);
         return draft;
     }
 
+
+    /**
+     * Embedding a jdbc insert dependency with a table setting.
+     *
+     * @param draft
+     * @return map
+     */
     private Map<String, Object> toMap(final StudentInfo draft) {
         HashMap<String, Object> map = new HashMap<>();
         if (draft.getId() != null) {
