@@ -7,7 +7,6 @@ import lombok.extern.jackson.Jacksonized;
 import ru.edu.project.backend.api.action.Action;
 import ru.edu.project.backend.api.common.Score;
 import ru.edu.project.backend.api.common.Status;
-import ru.edu.project.backend.api.tasks.TaskInfo;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
 @Setter
 @Builder
 @Jacksonized
-public class SolutionInfo {
+public class SolutionInfo implements SolutionInfoAbstract {
 
     /**
      * Solution id.
@@ -29,9 +28,29 @@ public class SolutionInfo {
     private Long studentId;
 
     /**
+     * Student's name.
+     */
+    private String studentName;
+
+    /**
      * Task id.
      */
     private Long taskId;
+
+    /**
+     * Task num.
+     */
+    private Integer taskNum;
+
+    /**
+     * Task text.
+     */
+    private String taskText;
+
+    /**
+     * Task title.
+     */
+    private String taskTitle;
 
     /** Text of solution.
      *
@@ -47,11 +66,6 @@ public class SolutionInfo {
      * Status.
      */
     private Status status;
-
-    /**
-     * Task.
-     */
-    private TaskInfo task;
 
     /**
      * Time of creation.

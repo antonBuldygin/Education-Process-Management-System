@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro https://www.liquibase.org/xml/ns/pro/liquibase-pro-4.3.xsd">
+
+    <changeSet id="usertable_001_create_table" author="ANeskorodeva">
+        <createTable tableName="users">
+            <column name="id" type="number">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="username" type="varchar(128)">
+                <constraints unique="true"/>
+            </column>
+            <column name="password" type="varchar(128)"/>
+            <column name="roles" type="varchar(128)"/>
+            <column name="enabled" type="boolean"/>
+        </createTable>
+
+        <createSequence sequenceName="user_id_sequence" startValue="100"/>
+
+        <insert tableName="users">
+            <column name="id">1</column>
+            <column name="username">student1</column>
+            <column name="password">{bcrypt}$2a$10$VhBJwY4iX1p4YVTncnC2ye74E/ao8qI5FT2.cgpo1Rr7klcHyZY0S</column>
+            <column name="roles">ROLE_STUDENT</column>
+            <column name="enabled">true</column>
+        </insert>
+        <insert tableName="users">
+            <column name="id">2</column>
+            <column name="username">student2</column>
+            <column name="password">{bcrypt}$2a$10$VhBJwY4iX1p4YVTncnC2ye74E/ao8qI5FT2.cgpo1Rr7klcHyZY0S</column>
+            <column name="roles">ROLE_STUDENT</column>
+            <column name="enabled">true</column>
+        </insert>
+        <insert tableName="users">
+            <column name="id">3</column>
+            <column name="username">teacher</column>
+            <column name="password">{bcrypt}$2a$10$MrAv1wO4cial.4epJ6A.teETjZsSsvsjTEvVDHd0SWzBC6hv96BOW</column>
+            <column name="roles">ROLE_TEACHER</column>
+            <column name="enabled">true</column>
+        </insert>
+        <insert tableName="users">
+            <column name="id">4</column>
+            <column name="username">admin</column>
+            <column name="password">{bcrypt}$2a$10$LpzCKJOsfSxqvXmTT4r6SOq3sCvcjYeqc6CnV1wosk3FgAaI8KuuW</column>
+            <column name="roles">ROLE_ADMIN</column>
+            <column name="enabled">true</column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

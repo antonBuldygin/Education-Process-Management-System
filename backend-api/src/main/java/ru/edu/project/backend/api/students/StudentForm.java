@@ -13,37 +13,36 @@ import java.sql.Timestamp;
 public class StudentForm {
 
     /**
-     * definition.
-     */
+     * Student id.
     private Long id;
 
     /**
-     * definition.
+     * Group id.
      */
     private Long groupId;
 
     /**
-     * definition.
+     * firstName.
      */
     private String firstName;
 
     /**
-     * definition.
+     * lastName.
      */
     private String lastName;
 
     /**
-     * definition.
+     * email.
      */
     private String email;
 
     /**
-     * definition.
+     * birthday.
      */
     private Timestamp birthday;
 
     /**
-     * definition.
+     * phone.
      */
     private String phone;
 }

@@ -33,5 +33,9 @@
         </rollback>
 
     </changeSet>
-
+    <changeSet id="taskService_002_create_task_sequence" author="ANeskorodeva">
+        <createSequence sequenceName="task_id_sequence"
+                        startValue="1"
+        />
+    </changeSet>
 </databaseChangeLog>

@@ -94,6 +94,16 @@ public class TaskServiceLayer implements TaskService {
     }
 
     /**
+     * Getting all tasks.
+     *
+     * @return list of tasks
+     */
+    @Override
+    public List<TaskInfo> getAllTasks() {
+        return daLayer.getAllTasks();
+    }
+
+    /**
      * Get task by id.
      *
      * @param id

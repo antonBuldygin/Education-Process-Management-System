@@ -8,7 +8,8 @@
 <body>
 <h1>Список студентов</h1>
 <div>
-    <a th:href="@{/student/create}">
+    <a th:href="@{'/' + ${role} + '/person/create/'}"
+       th:if="${role == 'admin'}">
         <button>Добавить студента</button>
     </a>
 </div>
@@ -19,10 +20,11 @@
             Дата рождения: <span th:text="${#dates.format(record.getBirthday(), 'dd-MM-yyyy')}"/>
         </div>
         <br>
-        <a th:href="@{/student/view/{id}(id=${record.getId()})}">
+        <a th:href="@{'/' + ${role} + '/person/view/' + ${record.getId()}}">
             <button>Просмотр</button>
         </a>
-        <a th:href="@{'/student/delete/' + ${record.getId}}">
+        <a th:href="@{'/' + ${role} + '/person/delete/' + ${record.getId}}"
+           th:if="${role == 'admin'}">
             <button>Удаление</button>
         </a>
     </div>

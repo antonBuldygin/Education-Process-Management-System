@@ -13,7 +13,6 @@ import java.sql.Timestamp;
 @Setter
 @Jacksonized
 public class StudentInfo {
-
     /**
      * definition.
      */

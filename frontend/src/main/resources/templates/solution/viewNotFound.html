@@ -7,10 +7,12 @@
 <body>
 <h1>Решение не найдено или недоступно</h1>
 <div>
-    <a href="/solution/">
+    <a th:href="@{'/' + ${role} + '/solution'}">
         <button>Вернуться к списку решений в работе</button>
     </a>
 </div>
-
+<div class="logout">
+    <a href="/logout">Выйти</a>
+</div>
 </body>
 </html>

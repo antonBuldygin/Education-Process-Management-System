@@ -1,5 +1,5 @@
 spring:
-  profiles.active: JDBC_TEMPLATE
+  profiles.active: SPRING_DATA #JDBC_TEMPLATE
   datasource:
     jndi-url: jdbc/backendDbLink
   h2:

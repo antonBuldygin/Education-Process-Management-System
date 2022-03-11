@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Редактирование данных студента</title>
@@ -8,7 +7,7 @@
 <body>
 <h1>Редактирование данных студента</h1>
 <div>
-    <a href="/student/">
+    <a th:href="@{'/' + ${role} + '/person/all'}">
         <button>Вернуться к списку студентов</button>
     </a>
 </div>

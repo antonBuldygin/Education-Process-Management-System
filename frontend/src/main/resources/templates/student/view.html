@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Просмотр данных студента</title>
@@ -8,8 +7,9 @@
 <body>
 <h1>Просмотр данных студента</h1>
 <div>
-    <a href="/student/">
-        <button>Вернуться к списку студентов</button>
+    <a th:href="@{'/' + ${role} + '/person/all'}"
+       th:if="${role == 'admin'}">
+    <button>Вернуться к списку студентов</button>
     </a>
 </div>
 <br>
@@ -34,16 +34,18 @@
         Телефон: <span th:text="${record.getPhone()}"/>
     </div>
     <br>
-    <div>
-        <a href="/solution/"><button>Решения</button></a>
-        <a th:href="@{/task/{id}(id=${record.getGroupId})}"><button>Список заданий</button></a>
+    <div th:if="${role != 'admin'}">
+        <a th:href="@{'/' + ${role} + '/solution'}">
+            <button>Решения</button>
+        </a>
+        <a th:href="@{'/' + ${role} + '/task/' + ${record.getGroupId}}"><button>Список заданий</button></a>
     </div>
     <br>
-    <div>
-        <a th:href="@{'/student/edit/' + ${record.getId}}">
+    <div th:if="${role == 'admin'}">
+        <a th:href="@{'/' + ${role} + '/person/edit/' + ${record.getId}}">
             <button>Редактировать</button>
         </a>
-        <a th:href="@{'/student/delete/' + ${record.getId}}">
+        <a th:href="@{'/' + ${role} + '/person/delete/' + ${record.getId}}">
             <button>Удалить</button>
         </a>
     </div>

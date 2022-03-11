@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Добавление студента</title>
@@ -8,7 +7,7 @@
 <body>
 <h1>Добавление студента</h1>
 <div>
-    <a th:href="@{'/student/'}">
+    <a th:href="@{'/' + ${role} + '/person/all'}">
         <button>Вернуться к списку студентов</button>
     </a>
 </div>

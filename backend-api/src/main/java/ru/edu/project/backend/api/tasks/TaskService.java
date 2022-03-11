@@ -40,6 +40,15 @@ public interface TaskService {
      */
     List<TaskInfo> getTasksByGroup(long groupId);
 
+
+    /**
+     * Getting all tasks.
+     *
+     * @return list of tasks
+     */
+    List<TaskInfo> getAllTasks();
+
+
     /**
      * Get task by id.
      *
@@ -55,5 +64,6 @@ public interface TaskService {
      * @return TaskInfo
      */
     int deleteById(long id);
+
 
 }

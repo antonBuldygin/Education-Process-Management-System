@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.edu.project.backend.api.common.PagedView;
+import ru.edu.project.backend.api.common.SolutionSearch;
 import ru.edu.project.backend.api.solutions.SolutionForm;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
-import ru.edu.project.backend.api.solutions.SolutionReviewForm;
 import ru.edu.project.backend.api.solutions.SolutionService;
+import ru.edu.project.backend.api.solutions.SolutionVerifyForm;
 import ru.edu.project.backend.service.SolutionServiceLayer;
 
 import java.util.List;
@@ -24,6 +26,7 @@ public class SolutionController implements SolutionService {
      */
     @Autowired
     private SolutionServiceLayer delegate;
+
 
     /**
      * Getting student's solutions.
@@ -46,8 +49,22 @@ public class SolutionController implements SolutionService {
     @Override
     @GetMapping("/getSolutionsByTask/{id}")
     public List<SolutionInfo> getSolutionsByTask(@PathVariable("id") final long taskId) {
-        return null;
+        return delegate.getSolutionsByTask(taskId);
     }
+
+    /**
+     * Searching for solutions.
+     *
+     * @param recordSearch
+     * @return list
+     */
+    @Override
+    @PostMapping("/searchSolutions")
+    public PagedView<SolutionInfo> searchSolutions(@RequestBody final SolutionSearch recordSearch) {
+        return delegate.searchSolutions(recordSearch);
+    }
+
+
     /**
      * Getting student's solution by task id.
      *
@@ -113,13 +130,13 @@ public class SolutionController implements SolutionService {
     /**
      * Solution is verified.
      *
-     * @param solutionReviewForm
+     * @param solutionVerifyForm
      * @return SolutionInfo
      */
     @Override
     @PostMapping("/verify")
-    public SolutionInfo verify(@RequestBody final SolutionReviewForm solutionReviewForm) {
-        return delegate.verify(solutionReviewForm);
+    public SolutionInfo verify(@RequestBody final SolutionVerifyForm solutionVerifyForm) {
+        return delegate.verify(solutionVerifyForm);
     }
 
 

@@ -7,13 +7,24 @@
 <body>
 <h1>Редактирование задания</h1>
 <div>
-    <a th:href="@{'/task/' + ${record.getGroupId()}}">
+    <a th:href="@{'/' + ${role} + '/task/all'}">
         <button>Вернуться к списку заданий</button>
     </a>
 </div>
 <form method="post">
     <p th:if="${errorsList!= null}">
         <p class="errorMessage" th:each="error: ${errorsList}" th:text="${error.getField()+' '+error.getDefaultMessage()}"></p>
+    </p>
+
+    <p>
+        <label>Группа</label>
+        <br>
+        <select name="groupId">
+            <option th:each="group : ${groups}"
+                    th:value="${group.id}"
+                    th:text="${group.id}"
+                    th:selected="${group.id} == ${record.getGroupId()}"></option>
+        </select>
     </p>
     <p>
         Номер: <input type="number" name="num" th:value="${record.getNum()}">
@@ -37,13 +48,12 @@
         <textarea name="text" th:text="${record.getText()}"></textarea>
     </p>
     <p>
-        <input name="groupId" type="hidden" th:value="${record.getGroupId()}"/>
-    </p>
-    <p>
         <button>Обновить задание</button>
     </p>
 </form>
-
+<div class="logout">
+    <a href="/logout">Выйти</a>
+</div>
 <style>
 .errorMessage {
     color: red;

@@ -7,12 +7,16 @@
 <body>
 <h1 th:text="${'Задание №' + record.getNum() + ' ' + record.getTitle()}"></h1>
 <div>
-    <a th:href="@{'/task/' + ${record.getGroupId()}}">
+    <a th:href="@{'/' + ${role} + '/task/' + ${record.getGroupId()}}">
         <button>Вернуться к списку заданий</button>
     </a>
 </div>
 <br>
 <div class="taskView">
+    <div>
+        Группа: <span th:text="${record.getGroupId()}"/>
+    </div>
+    <br>
     <div>
         Текст: <span th:text="${record.getText()}"/>
     </div>
@@ -25,14 +29,17 @@
         Дата окончания: <span th:text="${#dates.format(record.getEndDate(), 'dd-MM-yyyy')}"/>
     </div>
     <br>
-    <div>
-        <a th:href="@{'/task/edit/' + ${record.getId}}">
+    <div th:if="${role == 'teacher'}">
+        <a th:href="@{'/' + ${role} + '/task/edit/' + ${record.getId}}">
             <button>Редактировать</button>
         </a>
-        <a th:href="@{'/task/delete/' + ${record.getId} + '/' + ${record.getGroupId}}">
+        <a th:href="@{'/' + ${role} + '/task/delete/' + ${record.getId} + '/' + ${record.getGroupId}}">
             <button>Удалить</button>
         </a>
     </div>
+</div>
+<div class="logout">
+    <a href="/logout">Выйти</a>
 </div>
 </body>
 </html>

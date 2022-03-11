@@ -7,6 +7,7 @@ import ru.edu.project.backend.RestServiceInvocationHandler;
 import ru.edu.project.backend.api.solutions.SolutionService;
 import ru.edu.project.backend.api.students.StudentService;
 import ru.edu.project.backend.api.tasks.TaskService;
+import ru.edu.project.backend.api.user.UserService;
 
 import java.lang.reflect.Proxy;
 
@@ -39,6 +40,29 @@ public class RemoteServiceConfig {
         return getProxy(handler, TaskService.class);
     }
 
+    /**
+     * Rest-proxy for UserService.
+     *
+     * @param handler
+     * @return rest-proxy
+     */
+    @Bean
+    public UserService userService(final RestServiceInvocationHandler handler) {
+        handler.setServiceUrl("/user");
+        return getProxy(handler, UserService.class);
+    }
+
+    /**
+     * Rest-proxy for StudentService.
+     *
+     * @param handler
+     * @return rest-proxy
+     */
+    @Bean
+    public StudentService studentService(final RestServiceInvocationHandler handler) {
+        handler.setServiceUrl("/student");
+        return getProxy(handler, StudentService.class);
+    }
 
     /**
      * Rest-proxy for StudentService.

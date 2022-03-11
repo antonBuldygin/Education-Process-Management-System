@@ -33,6 +33,13 @@ public interface TaskDALayer {
     List<TaskInfo> getTasksByGroup(long groupId);
 
     /**
+     * Getting all tasks.
+     *
+     * @return list of tasks
+     */
+    List<TaskInfo> getAllTasks();
+
+    /**
      * Get task by id.
      *
      * @param id
@@ -47,4 +54,5 @@ public interface TaskDALayer {
      * @return int
      */
     int deleteById(long id);
+
 }

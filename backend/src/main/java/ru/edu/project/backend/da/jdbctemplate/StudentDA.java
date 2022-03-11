@@ -23,7 +23,6 @@ import java.util.Map;
 @Profile("JDBC_TEMPLATE")
 public class StudentDA implements StudentDALayer {
 
-
     /**
      * Getting student by id.
      */
@@ -75,6 +74,7 @@ public class StudentDA implements StudentDALayer {
         return mapRow(resultSet);
     }
 
+
     /**
      * Embedding a jdbc insert dependency with a table setting.
      *
@@ -86,6 +86,7 @@ public class StudentDA implements StudentDALayer {
         resultSet.next();
         return mapRow(resultSet);
     }
+
 
     /**
      * mapRow.
@@ -144,6 +145,7 @@ public class StudentDA implements StudentDALayer {
 
     }
 
+
     /**
      * Embedding a jdbc insert dependency with a table setting.
      *
@@ -155,6 +157,7 @@ public class StudentDA implements StudentDALayer {
         draft.setId(id);
         return draft;
     }
+
 
     /**
      * Embedding a jdbc insert dependency with a table setting.

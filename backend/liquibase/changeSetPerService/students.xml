@@ -22,10 +22,32 @@
             <column name="phone" type="VARCHAR(12)"/>
         </createTable>
 
+        <insert tableName="student">
+            <column name="id">1</column>
+            <column name="group_id">1</column>
+            <column name="first_name">Иван</column>
+            <column name="last_name">Иванов</column>
+            <column name="email">ivanov@mail.ru</column>
+            <column name="phone">89994445566</column>
+        </insert>
+        <insert tableName="student">
+            <column name="id">2</column>
+            <column name="group_id">2</column>
+            <column name="first_name">Петр</column>
+            <column name="last_name">Петров</column>
+            <column name="email">petrov@mail.ru</column>
+            <column name="phone">89994447788</column>
+        </insert>
+
         <rollback>
             <dropTable tableName="student"/>
         </rollback>
 
     </changeSet>
-
+    <changeSet id="studentService_002_create_student_sequence" author="AMishukov">
+        <createSequence sequenceName="student_id_sequence"
+                        startValue="3"
+        />
+    </changeSet>
 </databaseChangeLog>
+

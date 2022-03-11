@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Личный кабинет</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Личный кабинет</h1>
+<div>
+    <a href="/admin/person/all"><button>Список студентов</button></a>
+
+    <a href="/admin/groups/"><button>Список групп</button></a>
+
+    <a th:href="@{/admin/task/{id}(id='all')}"><button>Список заданий</button></a>
+
+    <a href="/admin/solution/"><button>Решения задач</button></a>
+</div>
+<div class="logout">
+    <a href="/logout">Выйти</a>
+</div>
+</body>
+</html>

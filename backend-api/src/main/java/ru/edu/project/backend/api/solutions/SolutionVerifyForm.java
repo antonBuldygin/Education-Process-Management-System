@@ -5,16 +5,11 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class SolutionReviewForm {
+public class SolutionVerifyForm {
     /** Solution id.
      *
      */
-    private long solutionId;
-
-    /**
-     * Student id.
-     */
-    private Long studentId;
+    private Long solutionId;
 
     /** Score.
      *

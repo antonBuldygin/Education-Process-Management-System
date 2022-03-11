@@ -8,7 +8,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Service;
 import ru.edu.project.backend.api.action.Action;
+import ru.edu.project.backend.api.common.PagedView;
 import ru.edu.project.backend.api.common.Score;
+import ru.edu.project.backend.api.common.SolutionSearch;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
 import ru.edu.project.backend.da.SolutionDALayer;
 import ru.edu.project.backend.model.SolutionStatus;
@@ -18,8 +20,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static ru.edu.project.backend.da.jdbctemplate.Common.getInteger;
 
 /**
  * Data Access layer for solution.
@@ -104,7 +104,6 @@ public class SolutionDA implements SolutionDALayer {
     }
 
 
-
     /**
      * Getting solutions by student id.
      *
@@ -114,6 +113,17 @@ public class SolutionDA implements SolutionDALayer {
     @Override
     public List<SolutionInfo> getSolutionsByStudent(final long studentId) {
         return jdbcTemplate.query(QUERY_SOLUTIONS_BY_STUDENT_ID, this::solutionRowMapper, studentId);
+    }
+
+    /**
+     * Searching for solutions.
+     *
+     * @param recordSearch
+     * @return list
+     */
+    @Override
+    public PagedView<SolutionInfo> search(final SolutionSearch recordSearch) {
+        return null;
     }
 
     /**
@@ -198,6 +208,16 @@ public class SolutionDA implements SolutionDALayer {
         jdbcNamed.update(QUERY_FOR_UPDATE_LINK, linkToMap(solutionInfo, comment));
     }
 
+    /**
+     * Getting all solutions.
+     *
+     * @return list of solutions
+     */
+    @Override
+    public List<SolutionInfo> getAllSolutions() {
+        return null;
+    }
+
 
     private SolutionInfo update(final SolutionInfo draft) {
         jdbcNamed.update(QUERY_FOR_UPDATE, solutionToMap(draft));
@@ -264,7 +284,7 @@ public class SolutionDA implements SolutionDALayer {
                 .creationTime(rs.getTimestamp("creation_time"))
                 .lastActionTime(rs.getTimestamp("last_action_time"))
                 .checkedTime(rs.getTimestamp("checked_time"))
-                .score(new Score(getInteger(rs, "score")))
+                .score(new Score(rs.getInt("score")))
                 .text(rs.getString("text"))
                 .build();
     }

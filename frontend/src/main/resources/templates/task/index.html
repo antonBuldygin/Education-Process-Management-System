@@ -7,7 +7,8 @@
 <body>
 <h1>Список заданий</h1>
 <div>
-    <a th:href="@{/task/create/{groupId}(groupId=${groupId})}">
+    <a th:href="@{'/' + ${role} + '/task/create/'}"
+       th:if="${role == 'teacher'}">
         <button>Добавить задание</button>
     </a>
 </div>
@@ -15,21 +16,27 @@
     <div class="task" th:each="record : ${tasks}">
         <h2 th:text="${'Задание №'+record.getNum() + ' : ' + record.getTitle()}"></h2>
         <div>
+            Группа: <span th:text="${record.getGroupId()}"/>
+            <br>
             Дата начала: <span th:text="${#dates.format(record.getStartDate(), 'dd-MM-yyyy')}"/>
             <br>
             Дата окончания: <span th:text="${#dates.format(record.getEndDate(), 'dd-MM-yyyy')}"/>
         </div>
         <br>
-        <a th:href="@{/task/view/{id}(id=${record.getId()})}">
+        <a th:href="@{'/' + ${role} + '/task/view/' + ${record.getId()}}">
             <button>Просмотр</button>
         </a>
-        <a th:href="@{'/task/delete/' + ${record.getId} + '/' + ${record.getGroupId}}">
+        <a th:href="@{'/' + ${role} + '/task/delete/' + ${record.getId}}"
+           th:if="${role == 'teacher'}">
             <button>Удаление</button>
         </a>
     </div>
 </div>
 <div th:unless="${tasks.size() > 0}">
     Нет загруженных заданий!
+</div>
+<div class="logout">
+    <a href="/logout">Выйти</a>
 </div>
 </body>
 </html>
