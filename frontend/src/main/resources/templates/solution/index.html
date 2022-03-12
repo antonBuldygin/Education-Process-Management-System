@@ -91,7 +91,8 @@
 <div th:unless="${solutionsPage.getTotal() > 0}">
     Нет заданий в работе!
 </div>
-<div class="logout">
+<div class="footer">
+    <a th:href="@{'/' + ${role} + '/'}">Личный кабинет</a>
     <a href="/logout">Выйти</a>
 </div>
 </body>

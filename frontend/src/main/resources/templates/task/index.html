@@ -35,7 +35,8 @@
 <div th:unless="${tasks.size() > 0}">
     Нет загруженных заданий!
 </div>
-<div class="logout">
+<div class="footer">
+    <a th:href="@{'/' + ${role} + '/'}">Личный кабинет</a>
     <a href="/logout">Выйти</a>
 </div>
 </body>

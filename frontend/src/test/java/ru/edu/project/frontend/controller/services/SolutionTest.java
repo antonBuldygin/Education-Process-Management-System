@@ -190,7 +190,7 @@ public class SolutionTest {
 
         String viewName = solution.createFormProcessing(createFormMock, bindingResultMock, modelMock, STUDENT_ID, STUDENT_ROLE);
 
-        assertEquals("redirect:/" + STUDENT_ROLE + "/solution/?created=" + SOLUTION_ID, viewName);
+        assertEquals("redirect:/" + STUDENT_ROLE + "/solution/view/" + SOLUTION_ID, viewName);
 
         verify(modelMock).addAttribute("role", STUDENT_ROLE);
         verify(solutionService).takeToWork(STUDENT_ID, TASK_ID);
@@ -229,7 +229,7 @@ public class SolutionTest {
     @Test
     public void uploadForm() {
 
-        ModelAndView view = solution.uploadForm(SOLUTION_ID, TASK_NUM, STUDENT_ROLE);
+        ModelAndView view = solution.uploadForm(SOLUTION_ID, TASK_NUM, STUDENT_ID, STUDENT_ROLE);
 
         assertEquals("solution/upload", view.getViewName());
 
@@ -416,8 +416,10 @@ public class SolutionTest {
     public void searchFields() {
         String searchBy = "TASK_NUM";
 
+        Solution.SearchFields searchFieldsExpect = Solution.SearchFields.TASK_NUM;
+
         Solution.SearchFields searchByField = Solution.SearchFields.byString(searchBy);
 
-        assertEquals("TASK_NUM", searchByField);
+        assertEquals(searchFieldsExpect, searchByField);
     }
 }

@@ -115,13 +115,13 @@ public class SolutionServiceLayer implements SolutionService {
                 .status(SolutionStatus.TASK_IN_WORK)
                 .build();
 
-        daLayer.save(solutionInfo);
+        SolutionInfo savedSolution = daLayer.save(solutionInfo);
 
-        daLayer.doAction(solutionInfo, null);
+        daLayer.doAction(savedSolution, null);
 
-        setExtraInfo(solutionInfo);
+        setExtraInfo(savedSolution);
 
-        return solutionInfo;
+        return savedSolution;
     }
 
     /**

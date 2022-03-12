@@ -1,4 +1,4 @@
-package ru.edu.project.frontend.controller;
+package ru.edu.project.frontend.controller.users;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -165,12 +165,12 @@ public class StudentControllerTest {
     @Test
     public void solutionUploadForm() {
 
-        when(solution.uploadForm(SOLUTION_ID, TASK_NUM, STUDENT_ROLE))
+        when(solution.uploadForm(SOLUTION_ID, TASK_NUM, STUDENT_ID, STUDENT_ROLE))
                 .thenReturn(new ModelAndView());
 
         studentController.solutionUploadForm(SOLUTION_ID, TASK_NUM, authentication);
 
-        verify(solution).uploadForm(SOLUTION_ID, TASK_NUM, STUDENT_ROLE);
+        verify(solution).uploadForm(SOLUTION_ID, TASK_NUM, STUDENT_ID, STUDENT_ROLE);
     }
 
     @Test
