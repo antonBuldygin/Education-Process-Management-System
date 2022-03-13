@@ -15,6 +15,7 @@ public class StudentCreateFormTest {
     public static final String EMAIL = "Email";
     public static final String PHONE = "8999944445656";
     public static final Timestamp BIRTHDAY_TS = new Timestamp(1647018000000L);
+    public static final String BIRTHDAY_TS_STRING = "2022-03-12";
 
     @Test
     public void studentCreateFormTest() {
@@ -25,7 +26,7 @@ public class StudentCreateFormTest {
         studentCreateForm.setLastName(LASTNAME);
         studentCreateForm.setEmail(EMAIL);
         studentCreateForm.setPhone(PHONE);
-        studentCreateForm.setBirthday(BIRTHDAY_TS.toString());
+        studentCreateForm.setBirthday(BIRTHDAY_TS_STRING);
 
         assertEquals(GROUP_ID, studentCreateForm.getGroupId());
         assertEquals(FIRSTNAME, studentCreateForm.getFirstName());
