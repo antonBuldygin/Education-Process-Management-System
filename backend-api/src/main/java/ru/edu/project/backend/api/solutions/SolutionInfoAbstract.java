@@ -66,7 +66,7 @@ public interface SolutionInfoAbstract {
     java.sql.Timestamp getCheckedTime();
 
     /**
-     * Action history.
+     * ActionInterface history.
      *
      * @return action
      */

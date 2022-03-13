@@ -1,5 +1,7 @@
 package ru.edu.project.backend.da;
 
+import ru.edu.project.backend.api.common.PagedView;
+import ru.edu.project.backend.api.common.RecordSearch;
 import ru.edu.project.backend.api.groups.GroupInfo;
 
 import java.util.List;
@@ -34,5 +36,23 @@ public interface GroupsDALayer {
      *@param id
      */
     void deleteGroup(long id);
+    /**
+     * Поиск заявок.
+     *
+     * @param recordSearch
+     * @return list
+     */
+    PagedView<GroupInfo> search(RecordSearch recordSearch);
+
+    /**
+     * Получение заявки по teacher_id.
+     *
+     * @param jobId
+     * @return groupInfo
+     */
+
+    List<GroupInfo> getByTeacherId(long jobId);
+
 
 }
+

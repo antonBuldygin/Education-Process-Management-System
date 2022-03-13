@@ -243,7 +243,7 @@ public class Student {
         );
 
         StudentInfo studentInfo = studentService.editStudent(StudentForm.builder()
-                .id(studentId)
+//                .id(studentId)
                 .groupId(form.getGroupId())
                 .firstName(form.getFirstName())
                 .lastName(form.getLastName())

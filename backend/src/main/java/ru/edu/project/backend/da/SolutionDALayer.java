@@ -67,7 +67,7 @@ public interface SolutionDALayer {
     /** Getting list of actions by solution id.
      *
      * @param solutionId
-     * @return List<Action>
+     * @return List<ActionInterface>
      */
     List<Action> getActionsBySolution(long solutionId);
 

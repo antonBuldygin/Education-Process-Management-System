@@ -23,7 +23,7 @@ import javax.validation.Valid;
 
 @RequestMapping("/admin")
 @Controller
-public class AdminController {
+public class    AdminController {
 
     /**
      * Frontend solution service.

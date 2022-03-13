@@ -35,7 +35,7 @@ public class SolutionActionEntity {
 
 
     /**
-     * Action time.
+     * ActionInterface time.
      */
     private Timestamp actionTime;
 
@@ -51,7 +51,7 @@ public class SolutionActionEntity {
 //    @Convert(converter = SolutionStatusConverter.class)
 //    @ManyToOne
 //    @MapsId("action_type_id")
-//    private Action action;
+//    private ActionInterface action;
 
     @Embeddable
     @Getter

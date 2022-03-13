@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.jackson.Jacksonized;
-import ru.edu.project.backend.api.action.Action;
+import ru.edu.project.backend.api.actiongroups.ActionInterface;
 import ru.edu.project.backend.api.common.Status;
 import ru.edu.project.backend.api.teachers.Teacher;
 
@@ -69,7 +69,7 @@ public class GroupInfo {
     /**
      * История действий.
      */
-    private List<Action> actionHistory;
+    private List<ActionInterface> actionHistory;
 
 
 

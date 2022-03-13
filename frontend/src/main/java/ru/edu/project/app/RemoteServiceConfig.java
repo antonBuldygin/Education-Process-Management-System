@@ -4,9 +4,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import ru.edu.project.backend.RestServiceInvocationHandler;
+import ru.edu.project.backend.api.groups.GroupsService;
 import ru.edu.project.backend.api.solutions.SolutionService;
 import ru.edu.project.backend.api.students.StudentService;
 import ru.edu.project.backend.api.tasks.TaskService;
+import ru.edu.project.backend.api.teachers.TeacherService;
 import ru.edu.project.backend.api.user.UserService;
 
 import java.lang.reflect.Proxy;
@@ -65,16 +67,39 @@ public class RemoteServiceConfig {
     }
 
     /**
-     * Rest-proxy for StudentService.
+     * Создаем rest-прокси для GroupsService.
      *
      * @param handler
      * @return rest-proxy
      */
     @Bean
-    public StudentService studentService(final RestServiceInvocationHandler handler) {
-        handler.setServiceUrl("/student");
-        return getProxy(handler, StudentService.class);
+    public GroupsService requestServiceRest(final RestServiceInvocationHandler handler) {
+        handler.setServiceUrl("/group");
+        return getProxy(handler, GroupsService.class);
     }
+
+    /**
+     * Создаем rest-прокси для GroupsService.
+     *
+     * @param handler
+     * @return rest-proxy
+     */
+    @Bean
+    public TeacherService jobService(final RestServiceInvocationHandler handler) {
+        handler.setServiceUrl("/job");
+        return getProxy(handler, TeacherService.class);
+    }
+//    /**
+//     * Rest-proxy for StudentService.
+//     *
+//     * @param handler
+//     * @return rest-proxy
+//     */
+//    @Bean
+//    public StudentService studentService(final RestServiceInvocationHandler handler) {
+//        handler.setServiceUrl("/student");
+//        return getProxy(handler, StudentService.class);
+//    }
 
     private <T> T getProxy(final RestServiceInvocationHandler handler, final Class<T>... tClass) {
         return (T) Proxy.newProxyInstance(this.getClass().getClassLoader(), tClass, handler);

@@ -1,23 +1,30 @@
 package ru.edu.project.backend.stub.requests;
 
-import ru.edu.project.backend.api.action.Action;
+
+import ru.edu.project.backend.api.actiongroups.SimpleAction;
+import ru.edu.project.backend.api.common.PagedView;
+import ru.edu.project.backend.api.common.RecordSearch;
 import ru.edu.project.backend.api.common.StatusImpl;
-import ru.edu.project.backend.api.groups.GroupInfo;
 import ru.edu.project.backend.api.groups.GroupForm;
+import ru.edu.project.backend.api.groups.GroupInfo;
 import ru.edu.project.backend.api.groups.GroupsService;
+import ru.edu.project.backend.api.groups.UpdateStatusRequest;
 import ru.edu.project.backend.api.teachers.Teacher;
 import ru.edu.project.backend.api.teachers.TeacherService;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 import static java.util.Arrays.asList;
-
 
 public class InMemoryStubGroupsService implements GroupsService {
 
@@ -35,7 +42,6 @@ public class InMemoryStubGroupsService implements GroupsService {
      * Локальный счетчик заявок.
      */
     private AtomicLong idCount = new AtomicLong(0);
-
 
 
     /**
@@ -57,6 +63,32 @@ public class InMemoryStubGroupsService implements GroupsService {
         }
         return db;
     }
+
+    /**
+     * Получение списка групп для учителя.
+     *
+     * @return список
+     */
+
+    @Override
+    public List<GroupInfo> getAllGroupsByTeacher(final long jobId) {
+        List<GroupInfo> listOfGroupsForTeacher = new ArrayList<>();
+        for (GroupInfo gip
+                : db) {
+            for (Teacher tch
+                    : gip.getTeachers()) {
+                if (tch.getId() == jobId) {
+                    listOfGroupsForTeacher.add(gip);
+
+                } else {
+                    continue;
+                }
+
+            }
+        }
+        return listOfGroupsForTeacher;
+    }
+
 
     /**
      * @inheritDoc
@@ -90,8 +122,11 @@ public class InMemoryStubGroupsService implements GroupsService {
                         .build())
                 .comment(groupForm.getComment())
                 .teachers(getJobsById(groupForm))
-                .actionHistory(asList(Action.builder()
+                .actionHistory(asList(SimpleAction.builder()
                         .time(new Timestamp(new Date().getTime()))
+                        .typeCode(1L)
+                        .typeMessage("Создание")
+                        .message("Группа создана")
                         .build()))
                 .build();
 
@@ -120,25 +155,62 @@ public class InMemoryStubGroupsService implements GroupsService {
         }
     }
 
-//        for (GroupInfo gi: db
-//             ) {
-//            if (gi.getId() == id) {
-//                db.remove(gi);
-//                Action action = Action.builder()
-//                        .time(new Timestamp(new Date().getTime()))
-//                        .typeCode(2L)
-//                        .typeMessage("Удаление")
-//                        .message("Группа удалена")
-//                        .build();
-//
-//                gi.getActionHistory().add(action);
+    /**
+     * Метод для поиска заявок.
+     *
+     * @param recordSearch
+     * @return list
+     */
+    @Override
+    public PagedView<GroupInfo> searchRequests(final RecordSearch recordSearch) {
+
+        Stream<GroupInfo> searchStream = db.stream();
 
 
+        if ("createdAt".equals(recordSearch.getOrderBy())) {
+            searchStream = searchStream.sorted((r1, r2) -> (recordSearch.isAsc() ? 1 : -1) * r1.getCreatedAt().compareTo(r2.getCreatedAt()));
+        }
 
+        if (recordSearch.getPage() > 1) {
+            searchStream = searchStream.skip(recordSearch.getPerPage() * recordSearch.getPerPage() - 1);
+        }
 
+        return PagedView.<GroupInfo>builder()
+                .page(recordSearch.getPage())
+                .perPage(recordSearch.getPerPage())
+                .totalPages(Long.valueOf(idCount.get() / recordSearch.getPerPage()).intValue())//
+                .total(idCount.get())
+                .elements(
+                        searchStream
+                                .limit(recordSearch.getPerPage())
+                                .collect(Collectors.toList())
+                )
+                .build();
+    }
 
     private List<Teacher> getJobsById(final GroupForm groupForm) {
         return servicesService.getByIds(groupForm.getSelectedTeachers());
     }
 
+    /**
+     * Изменение в группе.
+     *
+     * @param updateStatusRequest
+     * @return boolean
+     */
+    @Override
+    public boolean updateStatus(final UpdateStatusRequest updateStatusRequest) {
+
+        GroupInfo groupInfo = getDetailedInfo(updateStatusRequest.getGroupId());
+
+        if (groupInfo == null) {
+            return false;
+        }
+
+        groupInfo.setStatus(updateStatusRequest.getStatus());
+
+        return true;
+    }
 }
+
+

@@ -83,7 +83,7 @@ public class SolutionInfo implements SolutionInfoAbstract {
     private Timestamp checkedTime;
 
     /**
-     * Action history.
+     * ActionInterface history.
      */
     private List<Action> actionHistory;
 

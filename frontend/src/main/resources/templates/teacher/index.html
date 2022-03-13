@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Управление Группами</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+    <link th:href="@{/css/stylesAdmin.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Выбрать список групп у преподавателя</h1>
+
+
+<div class="logout">
+    <a href="/logout">Выйти</a>
+</div>
+
+<div>
+    <form>
+        <p>Учителей всего <span th:text="${teachers.size()}"/></p>
+
+        <p>
+            Преподаватель:
+            <select name="id">
+                <option th:each="field : ${teachers}" th:value="${field.id}" th:text="${field.teacherName}"></option>
+            </select>
+        </p>
+
+        <button>Перейти</button>
+    </form>
+</div>
+
+
+<h1>Ваши группы </h1>
+
+<table class="requestTable">
+    <thead>
+    <th>id</th>
+    <th>Дата создания</th>
+    <th>Статус</th>
+<!--            <th>Клиент</th>-->
+<!--    <th>Последнее обновление</th>-->
+<!--    <th>Действия</th>-->
+    </thead>
+    <tr class="request" th:each="record : ${requests}">
+        <td th:text="${record.getId()}"/>
+        <!--        <td th:text="${#dates.format(record.getCreatedAt(), 'dd-MM-yyyy HH:mm:ss')}"/>-->
+<!--        <td th:text="${record.getStatus().getMessage()}"/>-->
+        <!--            <td th:text="${record.getTeachers()}"/>-->
+        <td th:text="${#dates.format(record.getLastActionAt(), 'dd-MM-yyyy HH:mm:ss')}"/>
+        <td>
+            <a target="_blank" th:href="@{/teacher/view/{id}(id=${record.getId()})}">Просмотр</a>
+        </td>
+
+    </tr>
+
+
+</table>
+
+
+</div>
+
+</body>
+</html>

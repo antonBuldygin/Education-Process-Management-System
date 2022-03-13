@@ -7,7 +7,7 @@ import lombok.extern.jackson.Jacksonized;
 @Getter
 @Builder
 @Jacksonized
-public class Teacher {
+public class Teacher implements TeacherAbstract {
 
     /**
      * Код .

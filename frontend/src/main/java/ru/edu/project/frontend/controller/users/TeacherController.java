@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import ru.edu.project.backend.api.groups.GroupsService;
+import ru.edu.project.backend.api.teachers.TeacherService;
 import ru.edu.project.frontend.controller.forms.solutions.SolutionVerifyingForm;
 import ru.edu.project.frontend.controller.forms.tasks.TaskCreateForm;
 import ru.edu.project.frontend.controller.services.Group;
@@ -53,6 +55,74 @@ public class TeacherController {
      * List of sorting fields.
      */
     public static final String TEACHER_ROLE = "teacher";
+
+
+    /**
+     * Имя атрибута с заявками.
+     */
+    public static final String REQUESTS = "requests";
+
+    /**
+     * Атрибут модели для хранения списка доступных услуг.
+     */
+    public static final String JOBS_ATTR = "teachers";
+
+    /**
+     * Имя атрибута заявки.
+     */
+    public static final String RECORD_ATTR = "record";
+
+    /**
+     * Имя атрибута статусов заявки.
+     */
+    public static final String STATUSES_ATTR = "statuses";
+
+    /**
+     * Зависимость на сервис заявок.
+     */
+    @Autowired
+    private GroupsService groupsService;
+
+    /**
+     * Ссылка на сервис услуг.
+     */
+    @Autowired
+    private TeacherService teacherService;
+
+    /**
+     * Выбор групп по учителю.
+     *
+     * @param searchId
+     * @return modelAndView
+     */
+    @GetMapping("/ts")
+    public ModelAndView index(
+            @RequestParam(name = "id", required = false, defaultValue = "1") final int searchId
+    ) {
+
+        ModelAndView model = new ModelAndView("teacher/index");
+        model.addObject(JOBS_ATTR, teacherService.getAvailable());
+        model.addObject(REQUESTS,
+                groupsService.getAllGroupsByTeacher(searchId));
+        return model;
+    }
+
+    /**
+     * Просмотр заявки.
+     *
+     * @param id
+     * @return modelAndView
+     */
+    @GetMapping("/view/{id}")
+    public ModelAndView view(@PathVariable("id") final Long id) {
+
+        ModelAndView modelAndView = new ModelAndView("teacher/view");
+        modelAndView.addObject(RECORD_ATTR, groupsService.getDetailedInfo(id));
+        modelAndView.addObject(STATUSES_ATTR, ManagerController.RequestStatus.values());
+
+        groupsService.getDetailedInfo(id).getStatus().getMessage();
+        return modelAndView;
+    }
 
     /**
      * Displaying teacher's index page.

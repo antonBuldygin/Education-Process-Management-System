@@ -2,7 +2,6 @@ package ru.edu.project.backend.da;
 
 import ru.edu.project.backend.api.teachers.Teacher;
 
-
 import java.util.List;
 
 public interface TeachersDALayer {
@@ -45,4 +44,6 @@ public interface TeachersDALayer {
      * @return list job
      */
     List<Teacher> getLinksByRequestId(long requestId);
+
+
 }

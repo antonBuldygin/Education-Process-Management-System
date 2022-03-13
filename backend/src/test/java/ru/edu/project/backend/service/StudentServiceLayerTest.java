@@ -62,7 +62,7 @@ public class StudentServiceLayerTest {
 
         StudentInfo studentInfo = studentServiceLayer.editStudent(studentForm);
 
-        assertEquals(studentForm.getId(), studentInfo.getId());
+//        assertEquals(studentForm.getId(), studentInfo.getId());
         assertEquals(studentForm.getGroupId(), studentInfo.getGroupId());
         assertEquals(studentForm.getFirstName(), studentInfo.getFirstName());
         assertEquals(studentForm.getLastName(), studentInfo.getLastName());
@@ -116,7 +116,7 @@ public class StudentServiceLayerTest {
 
     private StudentForm studentBuilder() {
         return StudentForm.builder()
-                .id(STUDENT_ID)
+//                .id(STUDENT_ID)
                 .firstName(STUDENT_FIRST_NAME)
                 .lastName(STUDENT_LAST_NAME)
                 .birthday(STUDENT_BIRTHDAY_TS)

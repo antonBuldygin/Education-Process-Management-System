@@ -1,38 +1,39 @@
 package ru.edu.project.backend.api.common;
 
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+
 public class SimpleStatus implements Status {
 
     /**
-     * String status.
+     * Код статуса.
      */
-    private String status;
+    private Long code;
 
     /**
-     * Constructor.
+     * Строковый статус.
+     */
+    private String message;
+
+
+    /**
+     * Пустой конструктор.
+     */
+    public SimpleStatus() {
+    }
+
+    /**
+     * Конструктор.
      *
      * @param str
      */
     public SimpleStatus(final String str) {
-        this.status = str;
+        message = str;
     }
 
-    /**
-     * Get status code.
-     *
-     * @return code
-     */
-    @Override
-    public Long getCode() {
-        return null;
-    }
 
-    /**
-     * Get status message.
-     *
-     * @return code
-     */
-    @Override
-    public String getMessage() {
-        return status;
-    }
 }

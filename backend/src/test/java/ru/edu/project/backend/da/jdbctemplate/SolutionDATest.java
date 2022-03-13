@@ -42,7 +42,7 @@ public class SolutionDATest {
     public static final String SOLUTION_TEXT = "Text of the solution";
     public static final String SOLUTION_COMMENT = "Comment of the solution";
     public static final Long ACTION_TYPE_ID = 2L;
-    public static final String ACTION_COMMENT = "Action comment";
+    public static final String ACTION_COMMENT = "ActionInterface comment";
     public static final Timestamp ACTION_CREATION_TS = new Timestamp(4L);
 
 

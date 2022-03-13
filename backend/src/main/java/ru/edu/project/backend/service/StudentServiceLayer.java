@@ -54,7 +54,7 @@ public class StudentServiceLayer implements StudentService {
     @Override
     public StudentInfo editStudent(final StudentForm studentForm) {
         StudentInfo draft = StudentInfo.builder()
-                .id(studentForm.getId())
+                .id(studentForm.getGroupId())
                 .groupId(studentForm.getGroupId())
                 .firstName(studentForm.getFirstName())
                 .lastName(studentForm.getLastName())

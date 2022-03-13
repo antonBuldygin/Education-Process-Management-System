@@ -190,7 +190,7 @@ public class SolutionDA implements SolutionDALayer {
      * Getting list of actions by solution id.
      *
      * @param solutionId
-     * @return List<Action>
+     * @return List<ActionInterface>
      */
     @Override
     public List<Action> getActionsBySolution(final long solutionId) {

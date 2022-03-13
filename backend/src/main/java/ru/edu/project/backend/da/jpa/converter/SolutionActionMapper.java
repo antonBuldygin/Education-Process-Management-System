@@ -25,10 +25,10 @@ public interface SolutionActionMapper {
     SolutionActionEntity map(SolutionInfo solutionInfo);
 
     /**
-     * SolutionActionEntity -> Action.
+     * SolutionActionEntity -> ActionInterface.
      *
      * @param solutionActionEntity
-     * @return Action
+     * @return ActionInterface
      */
     @Mapping(source = "comment", target = "comment")
     @Mapping(expression = "java(ru.edu.project.backend.model.SolutionStatus.byCode(solutionActionEntity.getPk().getActionTypeId()))", target = "status")
@@ -36,10 +36,10 @@ public interface SolutionActionMapper {
     Action map(SolutionActionEntity solutionActionEntity);
 
     /**
-     * Mapping List<Entity> -> List<Action>.
+     * Mapping List<Entity> -> List<ActionInterface>.
      *
      * @param listEntity
-     * @return list Action
+     * @return list ActionInterface
      */
     List<Action> mapList(List<SolutionActionEntity> listEntity);
 }

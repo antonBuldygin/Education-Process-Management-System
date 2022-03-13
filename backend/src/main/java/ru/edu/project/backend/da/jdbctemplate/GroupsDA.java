@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Service;
+import ru.edu.project.backend.api.common.PagedView;
+import ru.edu.project.backend.api.common.RecordSearch;
 import ru.edu.project.backend.api.groups.GroupInfo;
 import ru.edu.project.backend.da.GroupsDALayer;
 import ru.edu.project.backend.model.GroupStatus;
@@ -47,6 +49,12 @@ public class GroupsDA implements GroupsDALayer {
     public static final String QUERY_FOR_UPDATE = "UPDATE group_g SET status = :status, last_action_time = :last_action_time, closed_time = :closed_time, price = :price, comment = :comment WHERE id = :id";
 
     /**
+     * Запрос поиска типов услуг привязанных к заявке.
+     */
+    public static final String QUERY_TYPE_BY_LINK_REQUEST_ID = "SELECT t.* FROM jobs_link l LEFT JOIN group_g t ON l.request_id = t.id WHERE l.job_id = ?";
+
+
+    /**
      * Зависимость на шаблон jdbc.
      */
     @Autowired
@@ -85,6 +93,7 @@ public class GroupsDA implements GroupsDALayer {
      */
     @Override
     public List<GroupInfo> getAllGroupsInfo() {
+
         return jdbcTemplate.query(QUERY_FOR_ALL_GROUPS, this::rowMapper);
     }
 
@@ -126,6 +135,30 @@ public class GroupsDA implements GroupsDALayer {
             return insert(draft);
         }
         return update(draft);
+    }
+
+
+    /**
+     * Поиск заявок.
+     *
+     * @param recordSearch
+     * @return list
+     */
+    @Override
+    public PagedView<GroupInfo> search(final RecordSearch recordSearch) {
+        //пока не реализуем этот метод, так как целевая реализация - Spring Data
+        throw new RuntimeException("Need to implement ru.edu.project.backend.da.jdbctemplate.RequestDA.search");
+    }
+
+    /**
+     * Получение заявки по teacher_id.
+     *
+     * @param jobId
+     * @return groupInfo
+     */
+    @Override
+    public List<GroupInfo> getByTeacherId(final long jobId) {
+        return jdbcTemplate.query(QUERY_TYPE_BY_LINK_REQUEST_ID, this::rowMapper, jobId);
     }
 
     private GroupInfo update(final GroupInfo draft) {

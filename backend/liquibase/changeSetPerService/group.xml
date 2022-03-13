@@ -28,7 +28,7 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="jobsService_002_create_table_sequence" author="sharypov">
+    <changeSet id="jobsService_002_create_table_sequence" author="buldygin">
         <createSequence sequenceName="request_id_sequence"
                         startValue="1"
         />
