@@ -45,13 +45,6 @@ public class SolutionActionEntity {
      */
     private String comment;
 
-//    /**
-//     * ActionType.
-//     */
-//    @Convert(converter = SolutionStatusConverter.class)
-//    @ManyToOne
-//    @MapsId("action_type_id")
-//    private Action action;
 
     @Embeddable
     @Getter

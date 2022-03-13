@@ -15,7 +15,8 @@
         <a th:href="@{'/' + ${role} + '/solution/view/' + ${record.getId()}}">Просмотр</a>
     </div>
 </div>
-<div class="logout">
+<div class="footer">
+    <a th:href="@{'/' + ${role} + '/'}">Личный кабинет</a>
     <a href="/logout">Выйти</a>
 </div>
 </body>

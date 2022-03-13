@@ -147,18 +147,19 @@ public class Task {
 
         List<SolutionInfo> solutionsByTask = solutionService.getSolutionsByTask(taskId);
 
+        model.addAttribute(
+                ROLE,
+                role
+        );
+
         if (solutionsByTask != null && solutionsByTask.size() > 0) {
+
             model.addAttribute(
                     SOLUTIONS_ATTR,
                     solutionsByTask
             );
             return "task/deleteError";
         }
-
-        model.addAttribute(
-                ROLE,
-                role
-        );
 
         int deletedInfo = taskService.deleteById(taskId);
 

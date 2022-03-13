@@ -111,6 +111,12 @@ public class Student {
         List<SolutionInfo> solutionsByTask = solutionService.getSolutionsByStudent(studentId);
 
         if (solutionsByTask != null && solutionsByTask.size() > 0) {
+
+            model.addAttribute(
+                    ROLE,
+                    role
+            );
+
             return "person/deleteError";
         }
 

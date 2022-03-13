@@ -7,7 +7,12 @@
 <body>
 <h1 th:text="${'Решение по заданию №' + record.getTaskNum() + ' ' + record.getTaskTitle()}"></h1>
 <div>
-    <a th:href="@{'/' + ${role} + '/solution'}">
+    <a th:href="@{'/' + ${role} + '/solution/person/' + ${record.getStudentId}}"
+       th:if="${role == 'student'}">
+        <button>Вернуться к решениям</button>
+    </a>
+    <a th:href="@{'/' + ${role} + '/solution/person/all'}"
+       th:if="${role == 'teacher' || role == 'admin'}">
         <button>Вернуться к решениям</button>
     </a>
     <a th:href="@{'/' + ${role} + '/solution/upload/' + ${record.getId} + '/' + ${record.getTaskNum}}"
@@ -64,7 +69,8 @@
         </div>
     </div>
 </div>
-<div class="logout">
+<div class="footer">
+    <a th:href="@{'/' + ${role} + '/'}">Личный кабинет</a>
     <a href="/logout">Выйти</a>
 </div>
 </body>

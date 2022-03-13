@@ -10,7 +10,7 @@ import javax.persistence.AttributeConverter;
 public class SolutionStatusConverter implements AttributeConverter<Status, Long> {
 
     /**
-     * Конвертация Status -> Long.
+     * Converting Status -> Long.
      *
      * @param status
      * @return long
@@ -24,7 +24,7 @@ public class SolutionStatusConverter implements AttributeConverter<Status, Long>
     }
 
     /**
-     * Конвертация Long -> SolutionStatus enum.
+     * Converting Long -> SolutionStatus enum.
      *
      * @param longValue
      * @return status enum

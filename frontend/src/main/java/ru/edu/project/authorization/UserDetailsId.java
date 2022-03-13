@@ -11,7 +11,7 @@ public class UserDetailsId extends User {
     /**
      * User id.
      */
-    private long userId;
+    private Long userId;
 
     /**
      * Constructor.

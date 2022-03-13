@@ -2,6 +2,8 @@ package ru.edu.project.backend.app;
 
 import lombok.SneakyThrows;
 import org.junit.Test;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.jndi.JndiObjectFactoryBean;
 
 import javax.sql.DataSource;
@@ -21,5 +23,14 @@ public class TomcatConfigTest {
         DataSource dataSource = tomcatConfig.jndiDataSource();
 
         assertNotNull(dataSource);
+    }
+
+    @Test
+    @SneakyThrows
+    public void tomcatServletWebServerFactory() {
+        TomcatServletWebServerFactory factory = tomcatConfig.tomcatServletWebServerFactory();
+
+        assertNotNull(factory);
+
     }
 }
