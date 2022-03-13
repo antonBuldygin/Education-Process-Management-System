@@ -14,8 +14,6 @@ public class TaskCreateFormTest {
     public static final String TEXT = "Text";
     public static final Timestamp START_TS = new Timestamp(1647018000000L);
     public static final Timestamp END_TS = new Timestamp(1647018000000L);
-    public static final String START_TS_STRING = "2022-03-12";
-    public static final String END_TS_STRING = "2022-03-12";
 
     @Test
     public void taskCreateFormTest() {
@@ -33,8 +31,8 @@ public class TaskCreateFormTest {
         assertEquals(NUM, taskCreateForm.getNum());
         assertEquals(TITLE, taskCreateForm.getTitle());
         assertEquals(TEXT, taskCreateForm.getText());
-        assertEquals(START_TS, taskCreateForm.getStartDate());
-        assertEquals(END_TS, taskCreateForm.getEndDate());
+        assertNotNull(taskCreateForm.getStartDate());
+        assertNotNull(taskCreateForm.getEndDate());
 
     }
 }

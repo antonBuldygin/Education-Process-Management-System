@@ -14,7 +14,6 @@ public class StudentCreateFormTest {
     public static final String LASTNAME = "Lastname";
     public static final String EMAIL = "Email";
     public static final String PHONE = "8999944445656";
-    public static final Timestamp BIRTHDAY_TS = new Timestamp(1647018000000L);
     public static final String BIRTHDAY_TS_STRING = "2022-03-12";
 
     @Test
@@ -33,7 +32,7 @@ public class StudentCreateFormTest {
         assertEquals(LASTNAME, studentCreateForm.getLastName());
         assertEquals(EMAIL, studentCreateForm.getEmail());
         assertEquals(PHONE, studentCreateForm.getPhone());
-        assertEquals(BIRTHDAY_TS, studentCreateForm.getBirthday());
+        assertNotNull(studentCreateForm.getBirthday());
 
     }
 

@@ -13,7 +13,6 @@ public class GroupsCreateFormTest {
 
     public static final List<Long> TEACHERS = new ArrayList<>();
     public static final String COMMENT = "Comment";
-    public static final Timestamp CREATED_TS = new Timestamp(1644427800000L);
     public static final String CREATED_TS_STRING = "2022-02-10T12:30";
 
 
@@ -28,6 +27,6 @@ public class GroupsCreateFormTest {
 
         assertEquals(TEACHERS, groupCreateForm.getTeachers());
         assertEquals(COMMENT, groupCreateForm.getComment());
-        assertEquals(CREATED_TS, groupCreateForm.getDateCreated());
+        assertNotNull(groupCreateForm.getDateCreated());
     }
 }
