@@ -7,7 +7,12 @@
 <body>
 <h1 th:text="${'Задание №' + record.getNum() + ' ' + record.getTitle()}"></h1>
 <div>
-    <a th:href="@{'/' + ${role} + '/task/' + ${record.getGroupId()}}">
+    <a th:href="@{'/' + ${role} + '/task/all'}"
+       th:if="${role == 'teacher' || role == 'admin'}">
+        <button>Вернуться к списку заданий</button>
+    </a>
+    <a th:href="@{'/' + ${role} + '/task/' + ${record.getGroupId()}}"
+       th:if="${role == 'student'}">
         <button>Вернуться к списку заданий</button>
     </a>
 </div>
@@ -33,12 +38,13 @@
         <a th:href="@{'/' + ${role} + '/task/edit/' + ${record.getId}}">
             <button>Редактировать</button>
         </a>
-        <a th:href="@{'/' + ${role} + '/task/delete/' + ${record.getId} + '/' + ${record.getGroupId}}">
+        <a th:href="@{'/' + ${role} + '/task/delete/' + ${record.getId}}">
             <button>Удалить</button>
         </a>
     </div>
 </div>
-<div class="logout">
+<div class="footer">
+    <a th:href="@{'/' + ${role} + '/'}">Личный кабинет</a>
     <a href="/logout">Выйти</a>
 </div>
 </body>

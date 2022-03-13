@@ -7,7 +7,7 @@
 <body>
 <h1>Получение задания</h1>
 <div>
-    <a th:href="@{'/' + ${role} + '/solution'}"><button>К списку решений</button></a>
+    <a th:href="@{'/' + ${role} + '/solution/person/${studentId}'}"><button>К списку решений</button></a>
 </div>
 <form method="post">
     <p th:if="${errorsList!= null}">
@@ -24,7 +24,8 @@
         <button>Получить задание</button>
     </p>
 </form>
-<div class="logout">
+<div class="footer">
+    <a th:href="@{'/' + ${role} + '/'}">Личный кабинет</a>
     <a href="/logout">Выйти</a>
 </div>
 <style>

@@ -94,7 +94,7 @@ public class StudentController {
      * @param auth
      * @return modelAndView
      */
-    @GetMapping("/solution")
+    @GetMapping("/solution/person/{studentId}")
     public ModelAndView solutionIndex(
             @RequestParam(name = "searchBy", required = false, defaultValue = "") final String searchBy,
             @RequestParam(name = "direct", required = false, defaultValue = "1") final boolean isAsc,
@@ -215,7 +215,9 @@ public class StudentController {
                                    @PathVariable("taskNum") final Integer taskNum,
                                    final Authentication auth) {
 
-        return solution.uploadForm(solutionId, taskNum, STUDENT_ROLE);
+        long studentId = getStudentId(auth);
+
+        return solution.uploadForm(solutionId, taskNum, studentId, STUDENT_ROLE);
     }
 
 

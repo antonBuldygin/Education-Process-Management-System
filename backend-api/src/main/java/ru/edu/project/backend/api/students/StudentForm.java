@@ -14,9 +14,10 @@ public class StudentForm {
 
     /**
      * Student id.
-     * private Long id;
-     * /
-     * /**
+     */
+    private Long id;
+
+    /**
      * Group id.
      */
     private Long groupId;

@@ -17,6 +17,9 @@
     <div class="student" th:each="record : ${students}">
         <h2 th:text="${record.getFirstName() + ' ' + record.getLastName()}"></h2>
         <div>
+            Группа: <span th:text="${record.getGroupId}"/>
+        </div>
+        <div>
             Дата рождения: <span th:text="${#dates.format(record.getBirthday(), 'dd-MM-yyyy')}"/>
         </div>
         <br>

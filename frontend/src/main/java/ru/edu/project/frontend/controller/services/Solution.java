@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.edu.project.backend.api.common.SolutionSearch;
 import ru.edu.project.backend.api.solutions.SolutionForm;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
+import ru.edu.project.backend.api.solutions.SolutionService;
 import ru.edu.project.backend.api.solutions.SolutionVerifyForm;
 import ru.edu.project.backend.api.students.StudentInfo;
 import ru.edu.project.backend.api.students.StudentService;
@@ -71,7 +72,7 @@ public class Solution {
      * Solution service.
      */
     @Autowired
-    private ru.edu.project.backend.api.solutions.SolutionService solutionService;
+    private SolutionService solutionService;
 
     /**
      * Task service.
@@ -195,6 +196,11 @@ public class Solution {
         StudentInfo studentInfo = studentService.getById(studentId);
 
         model.addAttribute(
+                "studentId",
+                studentId
+        );
+
+        model.addAttribute(
                 ROLE,
                 role
         );
@@ -239,7 +245,7 @@ public class Solution {
 
         SolutionInfo solution = solutionService.takeToWork(studentId, form.getTask());
 
-        return "redirect:/" + role + "/solution/?created=" + solution.getId();
+        return "redirect:/" + role + "/solution/view/" + solution.getId();
     }
 
     /**
@@ -247,11 +253,13 @@ public class Solution {
      *
      * @param solutionId
      * @param taskNum
+     * @param studentId
      * @param role
      * @return view
      */
     public ModelAndView uploadForm(final Long solutionId,
                                    final Integer taskNum,
+                                   final Long studentId,
                                    final String role
     ) {
 
@@ -260,6 +268,11 @@ public class Solution {
         model.addObject(
                 ROLE,
                 role
+        );
+
+        model.addObject(
+                "studentId",
+                studentId
         );
 
         model.addObject(
@@ -298,7 +311,7 @@ public class Solution {
                     bindingResult.getAllErrors()
             );
 
-            return uploadForm(solutionId, taskNum, role).getViewName();
+            return uploadForm(solutionId, taskNum, studentId, role).getViewName();
         }
 
         model.addAttribute(

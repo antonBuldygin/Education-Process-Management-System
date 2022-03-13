@@ -74,6 +74,7 @@ public class SolutionJpaDa implements SolutionDALayer {
         PageRequest pageRequest = PageRequest.of(recordSearch.getPage(), recordSearch.getPerPage(), Sort.by(direction, recordSearch.getOrderBy()));
 
         Page<SolutionEntity> page;
+
         if (recordSearch.getStudentId() == null) {
             page = repo.findAll(pageRequest);
         } else {
@@ -134,8 +135,6 @@ public class SolutionJpaDa implements SolutionDALayer {
         SolutionEntity entity = mapper.map(solutionInfo);
 
         SolutionEntity saved = repo.save(entity);
-
-        solutionInfo.setId(saved.getId());
 
         return mapper.map(saved);
     }

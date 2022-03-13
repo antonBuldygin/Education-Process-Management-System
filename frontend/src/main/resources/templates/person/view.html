@@ -35,7 +35,7 @@
     </div>
     <br>
     <div th:if="${role != 'admin'}">
-        <a th:href="@{'/' + ${role} + '/solution'}">
+        <a th:href="@{'/' + ${role} + '/solution/person/' + ${record.getId}}">
             <button>Решения</button>
         </a>
         <a th:href="@{'/' + ${role} + '/task/' + ${record.getGroupId}}"><button>Список заданий</button></a>

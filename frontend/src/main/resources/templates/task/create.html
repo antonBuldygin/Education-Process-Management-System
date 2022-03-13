@@ -47,7 +47,8 @@
         <button>Создать задание</button>
     </p>
 </form>
-<div class="logout">
+<div class="footer">
+    <a th:href="@{'/' + ${role} + '/'}">Личный кабинет</a>
     <a href="/logout">Выйти</a>
 </div>
 <style>

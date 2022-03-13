@@ -156,6 +156,28 @@ public class TeacherController {
     }
 
     /**
+     * Displaying student's solutions.
+     *
+     * @param searchBy
+     * @param isAsc
+     * @param page
+     * @param perPage
+     * @param studentId
+     * @return modelAndView
+     */
+    @GetMapping("/solution/person/{studentId}")
+    public ModelAndView solutionByStudentIndex(
+            @RequestParam(name = "searchBy", required = false, defaultValue = "") final String searchBy,
+            @RequestParam(name = "direct", required = false, defaultValue = "1") final boolean isAsc,
+            @RequestParam(name = "page", required = false, defaultValue = "1") final int page,
+            @RequestParam(name = "perPage", required = false, defaultValue = "10") final int perPage,
+            @PathVariable("studentId") final String studentId
+    ) {
+        return solution.index(searchBy, isAsc, page, perPage, studentId, TEACHER_ROLE);
+    }
+
+
+    /**
      * View solution by id.
      *
      * @param solutionId
