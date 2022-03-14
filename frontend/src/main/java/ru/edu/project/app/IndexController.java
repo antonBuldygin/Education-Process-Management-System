@@ -117,19 +117,24 @@ public class IndexController {
 
         if ("admin".equals(role)) {
             userRole = ROLE_ADMIN_STR;
-        } else if ("teacher".equals(role)) {
+        }
+        if ("teacher".equals(role)) {
             userRole = ROLE_TEACHER_STR;
         }
 
-        if (!password.equals(password2) || password.length() < MIN_PASS_LENGTH) {
-            return "redirect:/register?bad_password";
+        if ("student".equals(role)) {
+            userRole = ROLE_STUDENT_STR;
         }
 
-        try {
-            userServiceDa.insertRow(username, password, userRole);
-        } catch (Exception e) {
-            return "redirect:/register?invalid_request";
+            if (!password.equals(password2) || password.length() < MIN_PASS_LENGTH) {
+                return "redirect:/register?bad_password";
+            }
+
+            try {
+                userServiceDa.insertRow(username, password, userRole);
+            } catch (Exception e) {
+                return "redirect:/register?invalid_request";
+            }
+            return "redirect:/login";
         }
-        return "redirect:/login";
     }
-}
