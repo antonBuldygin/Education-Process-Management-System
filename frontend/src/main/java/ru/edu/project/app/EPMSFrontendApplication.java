@@ -17,7 +17,6 @@ public class EPMSFrontendApplication {
      */
     public static void main(final String[] args) {
         SpringApplication.run(EPMSFrontendApplication.class, args);
-        System.out.println("args = " + Arrays.deepToString(args));
     }
 
 }
