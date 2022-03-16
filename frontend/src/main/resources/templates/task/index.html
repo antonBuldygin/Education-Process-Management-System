@@ -11,6 +11,7 @@
        th:if="${role == 'teacher'}">
         <button>Добавить задание</button>
     </a>
+    <br>
 </div>
 <div th:if="${tasks.size() > 0}">
     <div class="task" th:each="record : ${tasks}">

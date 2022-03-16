@@ -8,6 +8,7 @@
 <h1 th:text="${'Оценка решения по заданию №' + taskNum}"></h1>
 <div>
     <a th:href="@{'/' + ${role} + '/solution'}"><button>К списку решений</button></a>
+    <br>
 </div>
 <form method="post">
     <p th:if="${errorsList!= null}">

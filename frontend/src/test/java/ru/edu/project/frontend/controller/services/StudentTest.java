@@ -10,6 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.servlet.ModelAndView;
 import ru.edu.project.authorization.UserDetailsId;
+import ru.edu.project.backend.api.groups.GroupInfo;
+import ru.edu.project.backend.api.groups.GroupsService;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
 import ru.edu.project.backend.api.solutions.SolutionService;
 import ru.edu.project.backend.api.students.StudentForm;
@@ -44,6 +46,9 @@ public class StudentTest {
 
     @Mock
     private StudentService studentService;
+
+    @Mock
+    private GroupsService groupService;
 
     @Mock
     private SolutionService solutionService;
@@ -178,9 +183,12 @@ public class StudentTest {
     public void createFormProcessingHasErrors() {
 
         List<ObjectError> mockErrors = new ArrayList<>();
+        List<GroupInfo> mockGroupsList = new ArrayList<>();
         BindingResult bindingResultMock = mock(BindingResult.class);
         when(bindingResultMock.hasErrors()).thenReturn(true);
         when(bindingResultMock.getAllErrors()).thenReturn(mockErrors);
+
+        when(groupService.getAllGroupsInfo()).thenReturn(mockGroupsList);
 
         StudentCreateForm createFormMock = mock(StudentCreateForm.class);
 

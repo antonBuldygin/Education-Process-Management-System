@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1 th:text="${'Решение по заданию №' + record.getTaskNum() + ' ' + record.getTaskTitle()}"></h1>
+<br>
 <div>
     <a th:href="@{'/' + ${role} + '/solution/person/' + ${record.getStudentId}}"
        th:if="${role == 'student'}">
@@ -31,16 +32,17 @@
        th:if="${record.getStatus().getMessage == 'IN_REVIEW' && role == 'teacher'}">
         <button>Оценить</button>
     </a>
-    <br>
 </div>
+<br>
 <div class="solutionView">
     <div th:if="${role == 'teacher' || role == 'admin'}">
         Студент: <span th:text="${record.getStudentName()}"/>
     </div>
+    <br>
     <div>
         Статус: <span th:text="${record.getStatus().getMessage()}"/>
     </div>
-    <br>
+    <br th:if="${record.getScore().getValue()!= null}">
     <div th:if="${record.getScore().getValue()!= null}">
         Оценка: <span th:text="${record.getScore().getValue()}"/>
     </div>
@@ -48,7 +50,7 @@
     <div>
         Задание: <span th:text="${record.getTaskText()}"/>
     </div>
-    <br>
+    <br th:if="${record.getText() != null && !record.getText().isEmpty()}">
     <div th:if="${record.getText() != null && !record.getText().isEmpty()}">
         Решение: <span th:text="${record.getText()}"/>
     </div>
@@ -56,6 +58,7 @@
     <div class="actionHistory" th:if="${record.getActionHistory() != null}">
         <div>История действий по решению задания:</div>
         <div class="history-record" th:each="history: ${record.getActionHistory()}">
+            <br>
             <div class="record-time">
                 Время: <span th:text="${#dates.format(history.getTime(), 'dd-MM-yyyy HH:mm:ss')}"/>
             </div>
@@ -65,7 +68,7 @@
             <div class="record-message" th:if="${history.getComment()!= null && !history.getComment().isEmpty()}">
                 Коментарий: <span th:text="${history.getComment()}"/>
             </div>
-            <br>
+            <hr>
         </div>
     </div>
 </div>
