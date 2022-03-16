@@ -10,6 +10,7 @@
     <a th:href="@{'/' + ${role} + '/task/all'}">
         <button>Вернуться к списку заданий</button>
     </a>
+    <br>
 </div>
 <form method="post">
     <p th:if="${errorsList!= null}">
@@ -17,8 +18,7 @@
     </p>
 
     <p>
-        <label>Группа</label>
-        <br>
+        <label>Группа: </label>
         <select name="groupId">
             <option th:each="group : ${groups}"
                     th:value="${group.id}"

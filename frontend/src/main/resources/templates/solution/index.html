@@ -11,10 +11,11 @@
     <a th:if="${role == 'student'}"
        th:href="@{'/' + ${role} + '/solution/create'}"><button>Получить задание</button></a>
 </div>
+
 <div th:if="${solutionsPage.getTotal() > 0}">
     <div>
         <form>
-            <p>Решений всего <span th:text="${solutionsPage.getTotal()}"/></p>
+            <p>Всего решений: <span th:text="${solutionsPage.getTotal()}"/></p>
             <p>Страница <span th:text="${solutionsPage.getPage()+1}"/> из <span
                     th:text="${solutionsPage.getTotalPages()}"/>
             </p>
@@ -57,7 +58,7 @@
                 </select>
             </p>
             <p>
-                <button>Перейти</button>
+                <button>Применить фильтр</button>
             </p>
         </form>
     </div>

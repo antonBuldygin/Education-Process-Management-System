@@ -8,6 +8,7 @@
 <h1>Невозможно удалить задание - по нему уже есть решения!</h1>
 <a th:href="@{'/' + ${role} + '/task/all'}">
     <button>Вернуться к списку заданий</button>
+    <br>
 </a>
 <div th:if="${solutions.size() > 0}">
     <div class="solution" th:each="record : ${solutions}">

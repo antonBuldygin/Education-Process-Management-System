@@ -35,5 +35,11 @@
 <div th:unless="${students.size() > 0}">
     Список студентов пока пуст!
 </div>
+
+<div class="footer">
+    <a th:href="@{'/' + ${role} + '/'}">Личный кабинет</a>
+    <a href="/logout">Выйти</a>
+</div>
+
 </body>
 </html>

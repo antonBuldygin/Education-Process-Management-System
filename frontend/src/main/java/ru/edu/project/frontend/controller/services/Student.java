@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
+import ru.edu.project.backend.api.groups.GroupsService;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
 import ru.edu.project.backend.api.solutions.SolutionService;
 import ru.edu.project.backend.api.students.StudentForm;
@@ -40,6 +41,11 @@ public class Student {
     @Autowired
     private StudentService studentService;
 
+    /**
+     * Group service.
+     */
+    @Autowired
+    private GroupsService groupsService;
 
     /**
      * Solution service.
@@ -144,6 +150,11 @@ public class Student {
                 role
         );
 
+        model.addAttribute(
+                "groups",
+                groupsService.getAllGroupsInfo()
+        );
+
         return "person/create";
     }
 
@@ -209,6 +220,11 @@ public class Student {
         );
 
         model.addObject(
+                "groups",
+                groupsService.getAllGroupsInfo()
+        );
+
+        model.addObject(
                 "record",
                 studentInfo
         );
@@ -249,7 +265,7 @@ public class Student {
         );
 
         StudentInfo studentInfo = studentService.editStudent(StudentForm.builder()
-//                .id(studentId)
+                .id(studentId)
                 .groupId(form.getGroupId())
                 .firstName(form.getFirstName())
                 .lastName(form.getLastName())

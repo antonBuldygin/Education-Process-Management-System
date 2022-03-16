@@ -23,6 +23,10 @@
     </div>
     <br>
     <div>
+        Группа: <span th:text="${record.getGroupId}"/>
+    </div>
+    <br>
+    <div>
         Дата рождения: <span th:text="${#dates.format(record.getBirthday(), 'dd-MM-yyyy')}"/>
     </div>
     <br>
@@ -50,5 +54,11 @@
         </a>
     </div>
 </div>
+
+<div class="footer">
+    <a th:href="@{'/' + ${role} + '/'}">Личный кабинет</a>
+    <a href="/logout">Выйти</a>
+</div>
+
 </body>
 </html>

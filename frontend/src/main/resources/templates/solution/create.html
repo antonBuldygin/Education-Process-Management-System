@@ -8,6 +8,7 @@
 <h1>Получение задания</h1>
 <div>
     <a th:href="@{'/' + ${role} + '/solution/person/${studentId}'}"><button>К списку решений</button></a>
+    <br>
 </div>
 <form method="post">
     <p th:if="${errorsList!= null}">

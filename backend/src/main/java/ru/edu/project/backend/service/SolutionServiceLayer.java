@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.edu.project.backend.api.common.PagedView;
 import ru.edu.project.backend.api.common.Score;
 import ru.edu.project.backend.api.common.SolutionSearch;
+import ru.edu.project.backend.api.common.Status;
 import ru.edu.project.backend.api.solutions.SolutionForm;
 import ru.edu.project.backend.api.solutions.SolutionInfo;
 import ru.edu.project.backend.api.solutions.SolutionService;
@@ -135,15 +136,11 @@ public class SolutionServiceLayer implements SolutionService {
 
         SolutionInfo solutionInfo = daLayer.getById(solutionForm.getSolutionId());
 
+        Status statusBeforeAction = solutionInfo.getStatus();
+
         if (solutionInfo.getStatus() != SolutionStatus.TASK_IN_WORK
                 && solutionInfo.getStatus() != SolutionStatus.UPLOADED) {
             throw new IllegalArgumentException("Can't uploading for solution not in status \"TASK_IN_WORK\" or \"UPLOADED\"!");
-        }
-
-        if (solutionInfo.getStatus() == SolutionStatus.TASK_IN_WORK) {
-            daLayer.doAction(solutionInfo, solutionForm.getComment());
-        } else {
-            daLayer.updateAction(solutionInfo, solutionForm.getComment());
         }
 
         solutionInfo.setText(solutionForm.getText());
@@ -151,6 +148,12 @@ public class SolutionServiceLayer implements SolutionService {
         solutionInfo.setLastActionTime(new Timestamp(new Date().getTime()));
 
         daLayer.save(solutionInfo);
+
+        if (statusBeforeAction == SolutionStatus.TASK_IN_WORK) {
+            daLayer.doAction(solutionInfo, solutionForm.getComment());
+        } else {
+            daLayer.updateAction(solutionInfo, solutionForm.getComment());
+        }
 
         setExtraInfo(solutionInfo);
 
